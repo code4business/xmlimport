@@ -1,0 +1,3 @@
+src/app/code/local/C4B/XmlImport/ app/code/local/C4B/XmlImport/
+src/app/design/frontend/base/default/template/c4b/xmlimport/ app/design/frontend/base/default/template/c4b/xmlimport/
+src/app/etc/modules/C4B_XmlImport.xml app/etc/modules/C4B_XmlImport.xml

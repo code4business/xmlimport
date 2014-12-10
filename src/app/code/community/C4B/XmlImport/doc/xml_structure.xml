@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<products>
+    <product>  
+        <stores>
+          <item>STORE_CODE</item><!-- Possible store scope value  -->
+        </stores>
+        <complex_data><!-- Complex attributes: attributes with multiple values (categories, media images, related products)  -->
+          <enum><!-- Complex Attribute. All <item>s in this <enum> need to have SAME children names and children count  -->
+            <item><!-- Complex Attribute value 1  -->
+              <ATTRIBUTE_CODE>value</ATTRIBUTE_CODE><!-- Complex Attribute value 1 data (ex: media_image)  -->
+              <ATTRIBUTE_CODE2>value</ATTRIBUTE_CODE2><!-- Complex Attribute value 1 data (ex: media_lable) -->
+            </item>
+            <item><!-- Complex Attribute value 1  -->
+              <ATTRIBUTE_CODE>value</ATTRIBUTE_CODE><!-- Complex Attribute value 2 data ex: media_image) -->
+              <ATTRIBUTE_CODE2>value</ATTRIBUTE_CODE2><!-- Complex Attribute value 2 data (ex: media_lable)  -->
+            </item>
+          </enum>
+        </complex_data>
+        <simple_data>
+          <SIMPLE_ATTRIBUTE_CODE>
+            <default>default scope value</default><!-- Default scope value  -->
+            <STORE_CODE>store scope value</STORE_CODE><!-- store scope value for store: STORE_CODE. Needs to be defined in <stores>  -->
+          </SIMPLE_ATTRIBUTE_CODE>
+        </simple_data>
+    </product>
+</products>

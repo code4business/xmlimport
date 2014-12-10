@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<products>
+    <product>
+        <stores>
+          <item>english</item>
+          <item>french</item>
+          <item>german</item>
+        </stores>
+        <complex_data>
+          <enum>
+            <item>
+              <_media_image>/images/test_image1.jpg</_media_image>
+              <_media_is_disabled>0</_media_is_disabled>
+            </item>
+            <item>
+              <_media_image>/images/test_image2.jpg</_media_image>
+              <_media_is_disabled>0</_media_is_disabled>
+            </item>
+          </enum>
+          <enum>
+            <item>
+              <_category>Importer Category</_category>
+            </item>
+			<item>
+			    <_category>Importer Category/Subcategory</_category>
+			</item>
+          </enum>
+          <enum>
+            <item>
+              <_product_websites>base</_product_websites>
+            </item>
+          </enum>
+        </complex_data>
+        <simple_data>
+          <sku>
+            <default>SIMPLE-1</default>
+          </sku>
+          <_attribute_set>
+            <default>Default</default>
+          </_attribute_set>
+          <_type>
+            <default>simple</default>
+          </_type>
+          <name>
+            <default>Import Simple product</default>
+            <english>Import English Simple product</english>
+            <french>Import French Simple product</french>
+            <german>Import German Einfaches produkt</german>
+          </name>
+          <price>
+            <default>10</default>
+          </price>
+          <description>
+            <default>Test description</default>
+          </description>
+          <short_description>
+            <default>Test short description</default>
+          </short_description>
+          <status>
+            <default>1</default>
+          </status>
+          <image>
+            <default>/images/test_image1.jpg</default>
+          </image>
+          <small_image>
+            <default>/images/test_image1.jpg</default>
+          </small_image>
+          <import_attr>
+            <default>test</default>
+          </import_attr>
+          <qty>
+            <default>50</default>
+          </qty>
+          <is_in_stock>
+            <default>1</default>
+          </is_in_stock>
+        </simple_data>
+    </product>
+    <product>
+        <stores>
+          <item>english</item>
+          <item>french</item>
+          <item>german</item>
+        </stores>
+        <complex_data>
+          <enum>
+            <item>
+              <_media_image>/images/test_image1.jpg</_media_image>
+              <_media_is_disabled>0</_media_is_disabled>
+            </item>
+          </enum>
+          <enum>
+            <item>
+              <_category>Importer Category</_category>
+            </item>
+			<item>
+			    <_category>Importer Category/Subcategory</_category>
+			</item>
+          </enum>
+          <enum>
+            <item>
+              <_product_websites>base</_product_websites>
+            </item>
+          </enum>
+        </complex_data>
+        <simple_data>
+          <sku>
+            <default>SIMPLE-2</default>
+          </sku>
+          <_attribute_set>
+            <default>Default</default>
+          </_attribute_set>
+          <_type>
+            <default>simple</default>
+          </_type>
+          <name>
+            <default>Import Simple product 2</default>
+            <english>Import English Simple product 2</english>
+            <french>Import French Simple product 2</french>
+            <german>Import German Einfaches produkt 2</german>
+          </name>
+          <price>
+            <default>20</default>
+          </price>
+          <description>
+            <default>Test description</default>
+          </description>
+          <short_description>
+            <default>Test short description</default>
+          </short_description>
+          <status>
+            <default>1</default>
+          </status>
+          <import_attr>
+            <default>test</default>
+          </import_attr>
+          <qty>
+            <default>55</default>
+          </qty>
+          <is_in_stock>
+            <default>1</default>
+          </is_in_stock>
+        </simple_data>
+    </product>
+    <product>
+        <stores>
+          <item>english</item>
+          <item>french</item>
+          <item>german</item>
+        </stores>
+        <complex_data>
+          <enum>
+            <item>
+              <_media_image>/images/test_image1.jpg</_media_image>
+              <_media_is_disabled>0</_media_is_disabled>
+            </item>
+          </enum>
+          <enum>
+            <item>
+              <_category>Importer Category</_category>
+            </item>
+			<item>
+			    <_category>Importer Category/Subcategory</_category>
+			</item>
+          </enum>
+          <enum>
+            <item>
+              <_product_websites>base</_product_websites>
+            </item>
+          </enum>
+        </complex_data>
+        <simple_data>
+          <sku>
+            <default>SIMPLE-3</default>
+          </sku>
+          <_attribute_set>
+            <default>Default</default>
+          </_attribute_set>
+          <_type>
+            <default>simple</default>
+          </_type>
+          <name>
+            <default>Import Simple product 3</default>
+            <english>Import English Simple product 3</english>
+            <french>Import French Simple product 3</french>
+            <german>Import German Einfaches produkt 3</german>
+          </name>
+          <price>
+            <default>30</default>
+          </price>
+          <description>
+            <default>Test description</default>
+          </description>
+          <short_description>
+            <default>Test short description</default>
+          </short_description>
+          <status>
+            <default>1</default>
+          </status>
+          <image>
+            <default>/images/test_image1.jpg</default>
+          </image>
+          <small_image>
+            <default>/images/test_image1.jpg</default>
+          </small_image>
+          <import_attr>
+            <default>test</default>
+          </import_attr>
+          <qty>
+            <default>56</default>
+          </qty>
+          <is_in_stock>
+            <default>1</default>
+          </is_in_stock>
+        </simple_data>
+    </product>
+    <product>
+        <stores>
+          <item>english</item>
+          <item>french</item>
+          <item>german</item>
+        </stores>
+        <complex_data>
+          <enum>
+            <item>
+              <_media_image>/images/test_image1.jpg</_media_image>
+              <_media_is_disabled>0</_media_is_disabled>
+            </item>
+          </enum>
+          <enum>
+            <item>
+              <_category>Importer Category</_category>
+            </item>
+          </enum>
+          <enum>
+            <item>
+              <_product_websites>base</_product_websites>
+            </item>
+          </enum>
+          <enum>
+            <item>
+              <_associated_sku>SIMPLE-1</_associated_sku>
+              <_associated_position>1</_associated_position>
+            </item>
+            <item>
+              <_associated_sku>SIMPLE-2</_associated_sku>
+              <_associated_position>2</_associated_position>
+            </item>
+          </enum>
+        </complex_data>
+        <simple_data>
+          <sku>
+            <default>GROUPED-1</default>
+          </sku>
+          <_attribute_set>
+            <default>Default</default>
+          </_attribute_set>
+          <_type>
+            <default>grouped</default>
+          </_type>
+          <name>
+            <default>Import Grouped product</default>
+            <english>Import English Grouped product</english>
+            <french>Import French Grouped product</french>
+            <german>Import German Gruppierte produkt</german>
+          </name>
+          <price>
+            <default>30</default>
+          </price>
+          <description>
+            <default>Test description</default>
+          </description>
+          <short_description>
+            <default>Test short description</default>
+          </short_description>
+          <status>
+            <default>1</default>
+          </status>
+          <image>
+            <default>/images/test_image1.jpg</default>
+          </image>
+          <small_image>
+            <default>/images/test_image1.jpg</default>
+          </small_image>
+          <import_attr>
+            <default>test</default>
+          </import_attr>
+          <qty>
+            <default>56</default>
+          </qty>
+          <is_in_stock>
+            <default>1</default>
+          </is_in_stock>
+        </simple_data>
+    </product>
+    <product>
+        <stores>
+          <item>english</item>
+          <item>french</item>
+          <item>german</item>
+        </stores>
+        <complex_data>
+          <enum>
+            <item>
+              <_media_image>/images/test_image1.jpg</_media_image>
+              <_media_is_disabled>0</_media_is_disabled>
+            </item>
+          </enum>
+          <enum>
+            <item>
+              <_category>Importer Category/Subcategory</_category>
+            </item>
+          </enum>
+          <enum>
+            <item>
+              <_product_websites>base</_product_websites>
+            </item>
+          </enum>
+        </complex_data>
+        <simple_data>
+          <sku>
+            <default>SIMPLE-4</default>
+          </sku>
+          <_attribute_set>
+            <default>default_configurable</default>
+          </_attribute_set>
+          <_type>
+            <default>simple</default>
+          </_type>
+          <name>
+            <default>Import Simple product 4</default>
+            <english>Import English Simple product 4</english>
+            <french>Import French Simple product 4</french>
+            <german>Import German Einfaches produkt 4</german>
+          </name>
+          <price>
+            <default>40</default>
+          </price>
+          <description>
+            <default>Test description</default>
+          </description>
+          <short_description>
+            <default>Test short description</default>
+          </short_description>
+          <status>
+            <default>1</default>
+          </status>
+          <image>
+            <default>/images/test_image1.jpg</default>
+          </image>
+          <small_image>
+            <default>/images/test_image1.jpg</default>
+          </small_image>
+          <import_attr>
+            <default>test</default>
+          </import_attr>
+          <qty>
+            <default>50</default>
+          </qty>
+          <is_in_stock>
+            <default>1</default>
+          </is_in_stock>
+          <color>
+            <default>green</default>
+          </color>
+        </simple_data>
+    </product>
+    <product>
+        <stores>
+          <item>english</item>
+          <item>french</item>
+          <item>german</item>
+        </stores>
+        <complex_data>
+          <enum>
+            <item>
+              <_media_image>/images/test_image1.jpg</_media_image>
+              <_media_is_disabled>0</_media_is_disabled>
+            </item>
+          </enum>
+          <enum>
+            <item>
+              <_category>Importer Category</_category>
+            </item>
+          </enum>
+          <enum>
+            <item>
+              <_product_websites>base</_product_websites>
+            </item>
+          </enum>
+        </complex_data>
+        <simple_data>
+          <sku>
+            <default>SIMPLE-5</default>
+          </sku>
+          <_attribute_set>
+            <default>default_configurable</default>
+          </_attribute_set>
+          <_type>
+            <default>simple</default>
+          </_type>
+          <name>
+            <default>Import Simple product 5</default>
+            <english>Import English Simple product 5</english>
+            <french>Import French Simple product 5</french>
+            <german>Import German Einfaches produkt 5</german>
+          </name>
+          <price>
+            <default>50</default>
+          </price>
+          <description>
+            <default>Test description</default>
+          </description>
+          <short_description>
+            <default>Test short description</default>
+          </short_description>
+          <status>
+            <default>1</default>
+          </status>
+          <import_attr>
+            <default>test</default>
+          </import_attr>
+          <qty>
+            <default>55</default>
+          </qty>
+          <is_in_stock>
+            <default>1</default>
+          </is_in_stock>
+          <color>
+            <default>red</default>
+          </color>
+        </simple_data>
+    </product>
+    <product>
+        <stores>
+          <item>english</item>
+          <item>french</item>
+          <item>german</item>
+        </stores>
+        <complex_data>
+          <enum>
+            <item>
+              <_media_image>/images/test_image1.jpg</_media_image>
+              <_media_is_disabled>0</_media_is_disabled>
+            </item>
+          </enum>
+          <enum>
+            <item>
+              <_category>Importer Category</_category>
+            </item>
+			<item>
+			    <_category>Importer Category/Subcategory</_category>
+			</item>
+          </enum>
+          <enum>
+            <item>
+              <_product_websites>base</_product_websites>
+            </item>
+          </enum>
+          <enum>
+            <item>
+              <_super_products_sku>SIMPLE-4</_super_products_sku>
+            </item>
+            <item>
+              <_super_products_sku>SIMPLE-5</_super_products_sku>
+            </item>
+          </enum>
+          <enum>
+            <item>
+              <_super_attribute_code>color</_super_attribute_code>
+            </item>
+          </enum>
+        </complex_data>
+        <simple_data>
+          <sku>
+            <default>CONFIGURABLE-1</default>
+          </sku>
+          <_attribute_set>
+            <default>default_configurable</default>
+          </_attribute_set>
+          <_type>
+            <default>configurable</default>
+          </_type>
+          <name>
+            <default>Import configurable product</default>
+            <english>Import English configurable product</english>
+            <french>Import French configurable product</french>
+            <german>Import German Konfigurable produkt</german>
+          </name>
+          <price>
+            <default>60</default>
+          </price>
+          <description>
+            <default>Test description</default>
+          </description>
+          <short_description>
+            <default>Test short description</default>
+          </short_description>
+          <status>
+            <default>1</default>
+          </status>
+          <image>
+            <default>/images/test_image1.jpg</default>
+          </image>
+          <small_image>
+            <default>/images/test_image1.jpg</default>
+          </small_image>
+          <import_attr>
+            <default>test</default>
+          </import_attr>
+          <qty>
+            <default>56</default>
+          </qty>
+          <is_in_stock>
+            <default>1</default>
+          </is_in_stock>
+        </simple_data>
+    </product>
+    <product>
+        <stores>
+          <item>english</item>
+          <item>french</item>
+          <item>german</item>
+        </stores>
+        <complex_data>
+          <enum>
+            <item>
+              <_media_image>/images/test_image1.jpg</_media_image>
+              <_media_is_disabled>0</_media_is_disabled>
+            </item>
+          </enum>
+          <enum>
+            <item>
+              <_category>Importer Category</_category>
+            </item>
+          </enum>
+          <enum>
+            <item>
+              <_product_websites>base</_product_websites>
+            </item>
+          </enum>
+          <enum>
+            <item>
+                <_bundle_option_type>select</_bundle_option_type>
+                <_bundle_option_position>1</_bundle_option_position>
+                <_bundle_option_required>1</_bundle_option_required>
+            </item>
+          </enum>
+          <enum>
+            <item>
+              <_bundle_option_title>Option one</_bundle_option_title>
+              <_bundle_product_sku>SIMPLE-1</_bundle_product_sku>
+              <_bundle_product_is_default>true</_bundle_product_is_default>
+              <_bundle_product_qty>5</_bundle_product_qty>
+              <_bundle_product_price_value>10</_bundle_product_price_value>
+              <_bundle_product_can_change_qty>0</_bundle_product_can_change_qty>
+            </item>
+            <item>
+              <_bundle_option_title>Option one</_bundle_option_title>
+              <_bundle_product_sku>SIMPLE-2</_bundle_product_sku>
+              <_bundle_product_is_default>false</_bundle_product_is_default>
+              <_bundle_product_qty>1</_bundle_product_qty>
+              <_bundle_product_price_value>20</_bundle_product_price_value>
+              <_bundle_product_can_change_qty>1</_bundle_product_can_change_qty>
+            </item>
+          </enum>
+        </complex_data>
+        <simple_data>
+          <sku>
+            <default>BUNDLE-1</default>
+          </sku>
+          <_attribute_set>
+            <default>Default</default>
+          </_attribute_set>
+          <_type>
+            <default>bundle</default>
+          </_type>
+          <name>
+            <default>Import bundle product</default>
+            <english>Import English bundle product</english>
+            <french>Import French bundle product</french>
+            <german>Import German bundle produkt</german>
+          </name>
+          <price>
+            <default>70</default>
+          </price>
+          <price_type>
+            <default>1</default>
+          </price_type>
+          <price_view>
+            <default>as low as</default>
+          </price_view>
+          <description>
+            <default>Test description</default>
+          </description>
+          <short_description>
+            <default>Test short description</default>
+          </short_description>
+          <status>
+            <default>1</default>
+          </status>
+          <image>
+            <default>/images/test_image1.jpg</default>
+          </image>
+          <small_image>
+            <default>/images/test_image1.jpg</default>
+          </small_image>
+          <import_attr>
+            <default>test</default>
+          </import_attr>
+          <qty>
+            <default>59</default>
+          </qty>
+          <is_in_stock>
+            <default>1</default>
+          </is_in_stock>
+        </simple_data>
+    </product>
+</products>
