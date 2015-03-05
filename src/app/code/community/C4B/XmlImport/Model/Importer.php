@@ -20,7 +20,13 @@ class C4B_XmlImport_Model_Importer
     const XML_PATH_PREPROCESSING_CREATE_CATEGORIES = 'c4b_xmlimport/preprocessing/create_category';
     
     const EVENT_AFTER_DATA_IMPORT = 'c4b_xmlimport_after_data_import';
-    
+
+    const RESULT_NO_VALID_FILES = 0;
+    const RESULT_OK = 1;
+    const RESULT_PARTIALLY_OK = 2;
+    const RESULT_NO_PRODUCTS = 3;
+    const RESULT_IMPORT_LOCKED = 4;
+
     /**
      * Collected files for importing
      * @var array(string)
@@ -43,29 +49,29 @@ class C4B_XmlImport_Model_Importer
         /* @var $messageHandler C4B_XmlImport_Model_MessageHandler */
         $messageHandler = Mage::getSingleton('xmlimport/messageHandler');
         $messageHandler->startReport();
-        
+
         $importFiles = $this->_collectImportFiles();
-        $success = false;
-        
+        $result = false;
+
         if( count($importFiles) == 0 )
         {
             $messageHandler->addNotice('No xml files found in import directory.');
-            $success = true;
-        } 
+            $result = self::RESULT_NO_PRODUCTS;
+        }
         else if( count($importFiles) != 0 && Mage::getResourceHelper('xmlimport')->setNamedLock($this->_lockName) )
         {
-            $this->_processImportFiles($importFiles);
-            $success = true;
-        } 
-        else 
+            $result = $this->_processImportFiles($importFiles);
+        }
+        else
         {
             $messageHandler->addError('Could not obtain lock.');
             $messageHandler->addError('Importing will not be performed.');
+            $result = self::RESULT_IMPORT_LOCKED;
         }
 
         $messageHandler->finalizeResults();
         Mage::getResourceHelper('xmlimport')->releaseNamedLock($this->_lockName);
-        return $success;
+        return $result;
     }
     
     /**
@@ -171,6 +177,7 @@ class C4B_XmlImport_Model_Importer
     /**
      * Process the collected files by validating and importing them
      * @param array
+     * @return int Result of file import
      */
     protected function _processImportFiles($importFiles)
     {
@@ -178,19 +185,32 @@ class C4B_XmlImport_Model_Importer
         $messageHandler = Mage::getSingleton('xmlimport/messageHandler');
         /* @var $helper C4B_XmlImport_Helper_Data */
         $helper = Mage::helper('xmlimport');
+        $validFiles = 0;
         foreach ($importFiles as $fileName => $filePath)
         {
             $messageHandler->addNotice("Processing file {$fileName}.");
             if($this->_importFile( realpath($filePath) ))
             {
                 rename( $filePath, $helper->getDirectory('success') . DS . $fileName );
+                $validFiles++;
             } else
             {
                 rename( $filePath, $helper->getDirectory('error') . DS . $fileName );
             }
             $messageHandler->addNotice("File {$fileName} processed.");
         }
-        return $this;
+
+        if($validFiles == 0)
+        {
+            return self::RESULT_NO_VALID_FILES;
+        }
+        else if($validFiles == count($importFiles))
+        {
+            return self::RESULT_OK;
+        } else
+        {
+            return self::RESULT_PARTIALLY_OK;
+        }
     }
     
     /**
