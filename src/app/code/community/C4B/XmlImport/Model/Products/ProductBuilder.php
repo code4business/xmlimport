@@ -65,7 +65,7 @@ class C4B_XmlImport_Model_Products_ProductBuilder
     
     /**
      * Return all error messages that were loged.
-     * @return multitype:
+     * @return array
      */
     public function getErrors()
     {
@@ -91,7 +91,7 @@ class C4B_XmlImport_Model_Products_ProductBuilder
     /**
      * Get store view codes used in the XML and uses only the ones registered in the system
      * @param SimpleXMLElement $xmlProductNode
-     * @return C4B_XmlImport_Model_Products_ProductBuilder;
+     * @return array|null product stores data;
      */
     protected function _extractStoreCodes( $xmlProductNode )
     {
@@ -116,10 +116,10 @@ class C4B_XmlImport_Model_Products_ProductBuilder
     }
     
     /**
-     * * Extract simple_data values from currently loaded xml.
+     * Extract simple_data values from currently loaded xml.
      * @param SimpleXMLElement $xmlProductNode
      * @param array $productData
-     * @return C4B_XmlImport_Model_Products_ProductBuilder
+     * @return array|null product simple data
      */
     protected function _extractSimpleData($xmlProductNode, $productData)
     {
@@ -172,7 +172,7 @@ class C4B_XmlImport_Model_Products_ProductBuilder
     /**
      * Processing after all attributes were collected.
      * @param array $productData
-     * @return C4B_XmlImport_Model_Products_ProductBuilder
+     * @return array|null product simple data
      */
     protected function _afterSimpleData($productData)
     {
@@ -210,7 +210,7 @@ class C4B_XmlImport_Model_Products_ProductBuilder
     /**
      * Extract complex data values from currently loaded xml node.
      * @param SimpleXMLElement $xmlProductNode
-     * @return C4B_XmlImport_Model_Products_ProductBuilder
+     * @return array|null product complex data
      */
     protected function _extractComplexData($xmlProductNode)
     {
@@ -240,7 +240,7 @@ class C4B_XmlImport_Model_Products_ProductBuilder
     /**
      * Additional altering of collected complex data.
      * @param $productComplexData
-     * @return array
+     * @return array|null product data
      */
     protected function _afterComplexData($productComplexData)
     {
@@ -265,7 +265,7 @@ class C4B_XmlImport_Model_Products_ProductBuilder
     /**
      * Create new categories if configured to do so.
      * @param array $productComplexData
-     * @return C4B_XmlImport_Model_Products_ProductBuilder
+     * @return array|null product complex data
      */
     protected function _createNewCategories($productComplexData)
     {
