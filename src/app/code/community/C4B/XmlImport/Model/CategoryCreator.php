@@ -51,6 +51,17 @@ class C4B_XmlImport_Model_CategoryCreator
     }
     
     /**
+     * Get the category ID from category path or false if it doesn't exist.
+     *
+     * @param $categoryPath
+     * @return bool|int
+     */
+    public function getCategoryIdFromPath($categoryPath)
+    {
+        return isset($this->_categories[$categoryPath]) ? $this->_categories[$categoryPath] : false;
+    }
+    
+    /**
      * Initialize an array with all category paths. Code taken from Avs_FastSimpleImport
      * @see AvS_FastSimpleImport_Model_Import_Entity_Product::_initCategories()
      */
