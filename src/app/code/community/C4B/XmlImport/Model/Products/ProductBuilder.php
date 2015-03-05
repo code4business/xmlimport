@@ -102,13 +102,18 @@ class C4B_XmlImport_Model_Products_ProductBuilder
         }
         $productData['default'] = array();
         
-        foreach($xmlProductNode->stores->children() as $storeNode){
-            $xmlStoreCode = $storeNode[0]->__toString();
-            if(in_array($xmlStoreCode, $systemStoreCodes)) {
-                $productData[$xmlStoreCode] = Array();
-            }
-            else {
-                $this->_errors[] = "The store '{$xmlStoreCode}' does not exist in the system. Data regarding this store will not be imported.";
+        if( property_exists($xmlProductNode,'stores') )
+        {
+            foreach ($xmlProductNode->stores->children() as $storeNode) 
+			{
+                $xmlStoreCode = $storeNode[0]->__toString();
+                if (in_array($xmlStoreCode, $systemStoreCodes)) 
+				{
+                    $productData[$xmlStoreCode] = Array();
+                } else 
+				{
+                    $this->_errors[] = "The store '{$xmlStoreCode}' does not exist in the system. Data regarding this store will not be imported.";
+                }
             }
         }
         
