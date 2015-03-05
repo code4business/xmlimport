@@ -53,7 +53,7 @@ class C4B_XmlImport_Model_Products_ProductBuilder
             $this->_errors[] = 'Invalid complex data.';
             return null;
         }
-        $complexAttributeData = $this->_afterComplexData($complexAttributeData);
+        $complexAttributeData = $this->_afterComplexData($complexAttributeData, $productData['default']['sku']);
         
         if( !is_null($complexAttributeData) && !empty($complexAttributeData) )
         {
@@ -240,14 +240,16 @@ class C4B_XmlImport_Model_Products_ProductBuilder
     /**
      * Additional altering of collected complex data.
      * @param $productComplexData
+     * @param $sku product SKU 
      * @return array|null product data
      */
-    protected function _afterComplexData($productComplexData)
+    protected function _afterComplexData($productComplexData, $sku)
     {
         $productComplexData = $this->_createNewCategories($productComplexData);
 
         $transport = new Varien_Object();
         $transport->setData('product_complex_data',$productComplexData);
+        $transport->setData('product_sku',$sku);
         $transport->setData('errors',array());
         $transport->setData('invalidate_data',false);
         
