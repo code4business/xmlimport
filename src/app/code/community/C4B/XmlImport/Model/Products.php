@@ -44,6 +44,7 @@ class C4B_XmlImport_Model_Products
             return self::VALIDATION_RESULT_NO_PRODUCT_NODES;
         }
         
+        $messageHandler->addNotice('File contains ' . $xml->children()->count() . ' product nodes');
         return self::VALIDATION_RESULT_OK;
     }
     
