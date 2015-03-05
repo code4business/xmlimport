@@ -36,8 +36,8 @@ class C4B_XmlImport_Model_AttributeCreator
                 '_custom_option_row_sku', '_custom_option_row_sort', '_media_attribute_id', '_media_image', '_media_lable',
                 '_media_position', '_media_is_disabled',
                 //Stock Data attributes
-                'manage_stock', 'use_config_manage_stock', 'qty', 'min_qty', 'use_config_min_qty', 'min_sale_qty', 'max_sale_qty', 
-                'use_config_max_sale_qty', 'is_qty_decimal', 'backorders', 'use_config_backorders', 'notify_stock_qty',
+                'manage_stock', 'use_config_manage_stock', 'qty', 'min_qty', 'use_config_min_qty', 'min_sale_qty','use_config_min_sale_qty',
+                'max_sale_qty', 'use_config_max_sale_qty', 'is_qty_decimal', 'backorders', 'use_config_backorders', 'notify_stock_qty',
                 'use_config_notify_stock_qty', 'enable_qty_increments', 'use_config_enable_qty_inc', 'qty_increments', 
                 'use_config_qty_increments', 'is_in_stock', 'low_stock_date', 'stock_status_changed_auto', 'is_decimal_divided'
         );
