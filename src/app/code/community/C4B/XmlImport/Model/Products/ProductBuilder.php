@@ -95,22 +95,29 @@ class C4B_XmlImport_Model_Products_ProductBuilder
      */
     protected function _extractStoreCodes( $xmlProductNode )
     {
-        $systemStores = Mage::getModel('core/store')->getCollection();
-        $systemStoreCodes = array('default');
-        foreach ($systemStores as $singleStore) {
-            $systemStoreCodes[] = $singleStore->getCode();
-        }
-        $productData['default'] = array();
-
         if( !property_exists($xmlProductNode,'stores') )
         {
-            return $productData;
+            return array('default' => array());
         }
+
+        $systemStores = Mage::getModel('core/store')->getCollection();
+        $systemStoreCodes = array();
+
+        foreach ($systemStores as $singleStore)
+        {
+            $systemStoreCodes[] = $singleStore->getCode();
+        }
+
+        $productData = array();
 
         foreach ($xmlProductNode->stores->children() as $storeNode)
         {
             $xmlStoreCode = $storeNode[0]->__toString();
-            if (in_array($xmlStoreCode, $systemStoreCodes))
+            if ($xmlStoreCode == 'default')
+            {
+                $productData = array('default' => array()) + $productData;
+            }
+            elseif (in_array($xmlStoreCode, $systemStoreCodes))
             {
                 $productData[$xmlStoreCode] = Array();
             } else
@@ -177,26 +184,51 @@ class C4B_XmlImport_Model_Products_ProductBuilder
     }
     
     /**
-     * Processing after all attributes were collected.
+     * Processing after all attributes were collected. Empty store scopes are removed and SKU is set only once and only
+     * in default scope. An event is also fired.
+     *
+     * @see Mage_ImportExport_Model_Import_Entity_Product::getRowScope()
      * @param array $productData
      * @return array|null product simple data
      */
     protected function _afterSimpleData($productData)
     {
+        $isSkuSet = false;
         foreach($productData as $storeCode => $storeSpecificData)
         {
-            if(count($storeSpecificData) == 0)
+            if( count($storeSpecificData) == 0 && $storeCode != 'default')
             {
                 unset($productData[$storeCode]);
                 continue;
             }
-            if(!array_key_exists('sku', $storeSpecificData))
+
+            $productData[$storeCode]['_store'] = $storeCode == 'default' ? null : $storeCode;
+
+            //SKU should always be set only in default scope.
+            if( $storeCode == 'default' && array_key_exists('sku', $storeSpecificData) )
+            {
+                $isSkuSet = true;
+            }
+            elseif( $isSkuSet == false && array_key_exists('sku', $storeSpecificData) )
+            {
+                $productData['default']['sku'] = $storeSpecificData['sku'];
+                $productData[$storeCode]['sku'] = null;
+                $isSkuSet = true;
+            }
+            else
             {
                 $productData[$storeCode]['sku'] = null;
-                $productData[$storeCode]['_store'] = $storeCode;
             }
         }
         
+
+        reset($productData);
+        if( key($productData) != 'default' )
+        {
+            $defaultScopeData = $productData['default'];
+            $productData = array( 'default' => $defaultScopeData ) + $productData;
+        }
+
         $transport = new Varien_Object();
         $transport->setData('product_data',$productData);
         $transport->setData('errors',array());
@@ -278,8 +310,8 @@ class C4B_XmlImport_Model_Products_ProductBuilder
      */
     protected function _createNewCategories($productComplexData)
     {
-        if( !array_key_exists('_category', $productComplexData) 
-                || Mage::getStoreConfig(C4B_XmlImport_Model_Importer::XML_PATH_PREPROCESSING_CREATE_CATEGORIES) == false )
+        if( !array_key_exists('_category', $productComplexData)
+            || Mage::getStoreConfig(C4B_XmlImport_Model_Importer::XML_PATH_PREPROCESSING_CREATE_CATEGORIES) == false )
         {
             return $productComplexData;
         }
