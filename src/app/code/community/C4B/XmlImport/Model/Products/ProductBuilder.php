@@ -29,9 +29,9 @@ class C4B_XmlImport_Model_Products_ProductBuilder
         $xmlProductNode = simplexml_import_dom( $node );
         
         $this->_errors = array();
-        if( !property_exists( $xmlProductNode, 'simple_data' ) && !property_exists($xmlProductNode, 'stores') )
+        if( !property_exists( $xmlProductNode, 'simple_data' ) )
         {
-            $this->_errors[] = 'Missing <simple_data> or <stores> node.';
+            $this->_errors[] = 'Missing <simple_data> node.';
             return null;
         }
         
@@ -48,7 +48,7 @@ class C4B_XmlImport_Model_Products_ProductBuilder
         }
         
         $complexAttributeData = $this->_extractComplexData( $xmlProductNode );
-        if($complexAttributeData == null)
+        if($complexAttributeData === null)
         {
             $this->_errors[] = 'Invalid complex data.';
             return null;
@@ -221,7 +221,7 @@ class C4B_XmlImport_Model_Products_ProductBuilder
      */
     protected function _extractComplexData($xmlProductNode)
     {
-        if(property_exists($xmlProductNode, 'complex_data') && !$xmlProductNode->complex_data->children())
+        if( !property_exists($xmlProductNode, 'complex_data') || !$xmlProductNode->complex_data->children())
         {
             return array();
         }
