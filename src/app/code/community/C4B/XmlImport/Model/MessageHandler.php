@@ -85,21 +85,6 @@ class C4B_XmlImport_Model_MessageHandler extends Varien_Object
         $this->_addMessage($message, Zend_Log::ERR);
         }
     }
-    
-    /**
-     * Format libXmlError messages as an array of strings. 
-     * @param array $libXmlError
-     */
-    public function formatXmlParseMessage($libXmlError)
-    {
-        $messages = array();
-        /* @var $libXmlError $singleError */
-        foreach($libXmlError as $singleError)
-        {            
-            $messages[] = "XML read {$this->_xmlErrorMessage[$singleError->level]}, code [{$singleError->code}], line [{$singleError->line}], column [{$singleError->column}]:\n $singleError->message";
-        }
-        return $messages;
-    }
 
     /**
      * Save, print and output error messages. Messages are saved per file and product.

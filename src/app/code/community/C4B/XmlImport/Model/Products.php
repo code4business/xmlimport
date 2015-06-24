@@ -25,27 +25,67 @@ class C4B_XmlImport_Model_Products
      */
     public function validateFile($filePath)
     {
-        $messageHandler = Mage::getSingleton('xmlimport/messageHandler');
-        try 
+        /* @var $messageHandler C4B_ProductImport_Model_MessageHandler */
+        $messageHandler = Mage::getSingleton('productimport/messageHandler');
+        $result = self::VALIDATION_RESULT_OK;
+        $nodeCount = 0;
+        $xmlParser = xml_parser_create();
+        $xmlReader = new XMLReader();
+
+        try
         {
-            libxml_use_internal_errors(true);
-            $xml = simplexml_load_file($filePath);
-            $messageHandler->addErrorsForFile( basename($filePath), ' ', $messageHandler->formatXmlParseMessage(libxml_get_errors()) );
+            if( !($xmlFile = fopen($filePath, 'r')) )
+            {
+                return self::VALIDATION_RESULT_FILE_ERROR;
+            }
+
+            while( $result == self::VALIDATION_RESULT_OK && ($readData = fread($xmlFile, 4096)) )
+            {
+                if( !xml_parse($xmlParser, $readData, feof($xmlFile)) )
+                {
+                    $messageHandler->addErrorsForFile(
+                        basename($filePath), ' ',
+                        sprintf('XML Syntax error: %s at line %d, column %d.',
+                            xml_error_string(xml_get_error_code($xmlParser)),
+                            xml_get_current_line_number($xmlParser),
+                            xml_get_current_column_number($xmlParser)
+                        )
+                    );
+                    $result = self::VALIDATION_RESULT_FILE_ERROR;
+                }
+            }
+
+            if( $result == self::VALIDATION_RESULT_OK)
+            {
+                $xmlReader->open($filePath);
+                if (!$xmlReader->next('products'))
+                {
+                    $result = self::VALIDATION_RESULT_NO_ROOT_NODE;
+                } else
+                {
+                    $nodeCount = $this->_countProductNodes($xmlReader);
+                }
+            }
+
         } catch(Exception $e)
         {
-            return self::VALIDATION_RESULT_FILE_ERROR;
+            $messageHandler->addErrorsForFile(basename($filePath), ' ', $e->getMessage());
         }
-        if(!$xml)
+
+        $xmlReader->close();
+        fclose($xmlFile);
+        xml_parser_free($xmlParser);
+
+        if( $nodeCount == 0 && $result == self::VALIDATION_RESULT_OK)
         {
-            return self::VALIDATION_RESULT_NO_ROOT_NODE;
+            $result = self::VALIDATION_RESULT_NO_PRODUCT_NODES;
         }
-        if(!property_exists($xml, self::XML_NODE_NAME_PRODUCT))
+        else if( $result == self::VALIDATION_RESULT_OK)
         {
-            return self::VALIDATION_RESULT_NO_PRODUCT_NODES;
+            $messageHandler->addNotice("File contains {$nodeCount} product nodes");
         }
-        
-        $messageHandler->addNotice('File contains ' . $xml->children()->count() . ' product nodes');
-        return self::VALIDATION_RESULT_OK;
+
+        return $result;
     }
     
     /**
@@ -88,5 +128,24 @@ class C4B_XmlImport_Model_Products
         }
         
         return $products;
+    }
+
+
+    /**
+     * Count the number of <product> nodes inside the given XML stream.
+     * @param XMLReader $xmlReader
+     * @return int
+     */
+    protected function _countProductNodes($xmlReader)
+    {
+        $nodeCount = 0;
+        while( $xmlReader->read() )
+        {
+            if($xmlReader->nodeType == XMLReader::ELEMENT && $xmlReader->name == 'product')
+            {
+                $nodeCount++;
+            }
+        }
+        return $nodeCount;
     }
 }
