@@ -86,7 +86,7 @@ class C4B_XmlImport_Model_MessageHandler extends Varien_Object
         }
         return $messages;
     }
-    
+
     /**
      * Save, print and output error messages. Messages are saved per file and product.
      * @param string $filename
@@ -126,8 +126,7 @@ class C4B_XmlImport_Model_MessageHandler extends Varien_Object
      */
     protected function _addMessage($message, $level)
     {
-        $message = '['.strftime('%Y-%m-%d %H:%M:%S').'] ' . $message;
-        echo $message . "\n";
+        echo '['.strftime('%Y-%m-%d %H:%M:%S').'] ' . $message . "\n";
         Mage::log($message, $level, self::DEFAULT_LOG_FILE_NAME, true);
         return $this;
     }
