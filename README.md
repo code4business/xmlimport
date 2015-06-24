@@ -33,6 +33,8 @@ This sample XML-file explanis the basic structure:
 <products>
   <product>  
     <stores>
+    <!-- Default scope  -->
+      <item>default</item>
       <!-- Possible store scope value  -->
       <item>STORE_CODE</item>
     </stores>
@@ -71,7 +73,8 @@ This sample XML-file explanis the basic structure:
 ```
 
 This are the meanings of the XML nodes:  
-- **stores**: Each item inside this node is a store code. Only data for these stores will be read from each attribute for this product.  
+- **stores**: Each item inside this node is a store code. Only data for these stores will be read from each attribute for this product. If this node is omitted, 
+default scope is used.  
 - **simple_data**: Each element inside here is a simple attribute code.  
 - **SIMPLE\_ATTRIBUTE\_CODE**: Represents a single simple attribute. The attribute values go to one or more children nodes.  
 These children nodes need to match the ones defined in `<stores>` element or they will not be read. For default scope,  

@@ -2,6 +2,7 @@
 <products>
     <product>
         <stores>
+          <item>default</item>
           <item>english</item>
           <item>french</item>
           <item>german</item>
@@ -78,6 +79,7 @@
     </product>
     <product>
         <stores>
+          <item>default</item>
           <item>english</item>
           <item>french</item>
           <item>german</item>
@@ -144,6 +146,7 @@
     </product>
     <product>
         <stores>
+          <item>default</item>
           <item>english</item>
           <item>french</item>
           <item>german</item>
@@ -216,6 +219,7 @@
     </product>
     <product>
         <stores>
+          <item>default</item>
           <item>english</item>
           <item>french</item>
           <item>german</item>
@@ -295,6 +299,7 @@
     </product>
     <product>
         <stores>
+          <item>default</item>
           <item>english</item>
           <item>french</item>
           <item>german</item>
@@ -367,6 +372,7 @@
     </product>
     <product>
         <stores>
+          <item>default</item>
           <item>english</item>
           <item>french</item>
           <item>german</item>
@@ -433,6 +439,7 @@
     </product>
     <product>
         <stores>
+          <item>default</item>
           <item>english</item>
           <item>french</item>
           <item>german</item>
@@ -518,6 +525,7 @@
     </product>
     <product>
         <stores>
+          <item>default</item>
           <item>english</item>
           <item>french</item>
           <item>german</item>
