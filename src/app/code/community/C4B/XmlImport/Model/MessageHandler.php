@@ -30,7 +30,12 @@ class C4B_XmlImport_Model_MessageHandler extends Varien_Object
     const XML_PATH_NOTIFICATIONS_MISSING_ATTRIBUTES_EMAIL_TEMPLATE = 'c4b_xmlimport/notifications/missing_attributes_template';
     const XML_PATH_NOTIFICATIONS_IMPORT_ERROR_RECIPIENTS = 'c4b_xmlimport/notifications/import_error_receipients';
     const XML_PATH_NOTIFICATIONS_IMPORT_ERROR_EMAIL_TEMPLATE = 'c4b_xmlimport/notifications/import_error_template';
-    
+
+    /**
+     * @var DateTime
+     */
+    protected $_dateTime = null;
+
     /**
      * 
      * @var array
@@ -42,7 +47,16 @@ class C4B_XmlImport_Model_MessageHandler extends Varien_Object
      * @var array
      */
     protected $_xmlErrorMessage = array('none','warning','error','fatal');
-    
+
+    /**
+     * Default constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->_dateTime = new DateTime('now', new DateTimeZone( Mage::getStoreConfig('general/locale/timezone')));
+    }
+
     /**
      * Log message as notice.
      * @param string $message
@@ -126,7 +140,7 @@ class C4B_XmlImport_Model_MessageHandler extends Varien_Object
      */
     protected function _addMessage($message, $level)
     {
-        echo '['.strftime('%Y-%m-%d %H:%M:%S').'] ' . $message . "\n";
+        echo "[{$this->_dateTime->format('Y-m-d H:i:s')}] {$message}\n";
         Mage::log($message, $level, self::DEFAULT_LOG_FILE_NAME, true);
         return $this;
     }
