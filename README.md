@@ -4,7 +4,7 @@ Converts XML import files into data that is then imported using [AvS\_FastSimple
 
 Information
 -----------
-- Version: 0.0.1
+- Version: 0.1.0
 - [Github](https://github.com/code4business/xmlimport)
 
 Description
@@ -105,6 +105,7 @@ Compatibility
 Current Limitations
 -------------------
 - When creating missing categories, only one root category is used. In a multi-website shop this would only work for one at a time.  
+- If you are using Enterprise scheduled reindexing (version 1.13+), deadlocks can happen if import and indexing run at the same time  
 
 Contribution
 ------------
