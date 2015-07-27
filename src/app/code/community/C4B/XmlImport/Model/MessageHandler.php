@@ -125,6 +125,7 @@ class C4B_XmlImport_Model_MessageHandler extends Varien_Object
      */
     protected function _addMessage($message, $level)
     {
+        $this->_dateTime->setTimestamp(time());
         echo "[{$this->_dateTime->format('Y-m-d H:i:s')}] {$message}\n";
         Mage::log($message, $level, self::DEFAULT_LOG_FILE_NAME, true);
         return $this;
