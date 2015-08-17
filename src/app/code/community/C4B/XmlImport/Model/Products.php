@@ -26,7 +26,7 @@ class C4B_XmlImport_Model_Products
     public function validateFile($filePath)
     {
         /* @var $messageHandler C4B_ProductImport_Model_MessageHandler */
-        $messageHandler = Mage::getSingleton('productimport/messageHandler');
+        $messageHandler = Mage::getSingleton('xmlimport/messageHandler');
         $result = self::VALIDATION_RESULT_OK;
         $nodeCount = 0;
         $xmlParser = xml_parser_create();
