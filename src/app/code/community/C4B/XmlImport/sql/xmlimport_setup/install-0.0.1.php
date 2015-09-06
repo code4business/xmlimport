@@ -29,7 +29,7 @@ if( is_null($errorMailTemplate->getId()) )
     ));
     $errorMailTemplate->save();
 }
-$installer->setConfigData(C4B_XmlImport_Model_MessageHandler::XML_PATH_NOTIFICATIONS_IMPORT_ERROR_EMAIL_TEMPLATE, $errorMailTemplate->getId());
+$installer->setConfigData(C4B_XmlImport_Model_Importer_Report::XML_PATH_NOTIFICATIONS_IMPORT_ERROR_EMAIL_TEMPLATE, $errorMailTemplate->getId());
 
 /* @var $mailTemplate Mage_Core_Model_Email_Template */
 $missingAttributesEmailTemplate = Mage::getModel('core/email_template')->loadByCode('Product Import Missing Attributes Report');
@@ -45,6 +45,6 @@ if( is_null($missingAttributesEmailTemplate->getId()) )
     ));
     $missingAttributesEmailTemplate->save();
 }
-$installer->setConfigData(C4B_XmlImport_Model_MessageHandler::XML_PATH_NOTIFICATIONS_MISSING_ATTRIBUTES_EMAIL_TEMPLATE, $missingAttributesEmailTemplate->getId());
+$installer->setConfigData(C4B_XmlImport_Model_Importer_Report::XML_PATH_NOTIFICATIONS_MISSING_ATTRIBUTES_EMAIL_TEMPLATE, $missingAttributesEmailTemplate->getId());
 
 $installer->endSetup();

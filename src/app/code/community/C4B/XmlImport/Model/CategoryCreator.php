@@ -11,12 +11,12 @@
 class C4B_XmlImport_Model_CategoryCreator
 {
     const EVENT_MISSING_CATEGORY_CREATED = 'c4b_xmlimport_missing_category_created';
-    
+
     const XML_PATH_ROOT_CATEGORY_ID = 'c4b_xmlimport/preprocessing/root_category';
-    
-    protected $_categories = array();    
+
+    protected $_categories = array();
     protected $_errors = array();
-    
+
     /**
      * Default constructor.
      */
@@ -24,7 +24,7 @@ class C4B_XmlImport_Model_CategoryCreator
     {
         $this->_initCategories();
     }
-    
+
     /**
      * Creates the specified category if it doesn't exist.
      * @param string $categoryName
@@ -38,7 +38,7 @@ class C4B_XmlImport_Model_CategoryCreator
         }
         return true;
     }
-    
+
     /**
      * Retreive an array of messages that were generated during creation of categories and delete.
      * @return array
@@ -49,7 +49,7 @@ class C4B_XmlImport_Model_CategoryCreator
         $this->_errors = array();
         return $errors;
     }
-    
+
     /**
      * Get the category ID from category path or false if it doesn't exist.
      *
@@ -60,7 +60,7 @@ class C4B_XmlImport_Model_CategoryCreator
     {
         return isset($this->_categories[$categoryPath]) ? $this->_categories[$categoryPath] : false;
     }
-    
+
     /**
      * Initialize an array with all category paths. Code taken from Avs_FastSimpleImport
      * @see AvS_FastSimpleImport_Model_Import_Entity_Product::_initCategories()
@@ -81,7 +81,7 @@ class C4B_XmlImport_Model_CategoryCreator
                         $path[] = $item->getName();
                     }
                 }
-        
+
                 // additional options for category referencing: name starting from base category, or category id
                 $this->_categories[implode('/', $path)] = $category->getId();
                 array_shift($path);
@@ -90,7 +90,7 @@ class C4B_XmlImport_Model_CategoryCreator
             }
         }
     }
-    
+
     /**
      * Create nonexistent category and all nonexistent parents recursively.
      * @param string $categoryName Name of category E.g. Kategorien/Keramic/Hersteller5
@@ -98,15 +98,15 @@ class C4B_XmlImport_Model_CategoryCreator
      */
     protected function _createCategoryRecursively($categoryName)
     {
-        /* @var $messageHandler C4B_XmlImport_Model_MessageHandler */
-        $messageHandler = Mage::getSingleton('xmlimport/messageHandler');
+        /* @var $importReport C4B_XmlImport_Model_Importer_Report */
+        $importReport = Mage::getSingleton('xmlimport/importer_report');
         if (trim($categoryName) == '')
         {
             return null;
         }
-    
+
         $categoryPathArray = explode('/', $categoryName);
-    
+
         // Check that category path does not have empty element names.
         foreach($categoryPathArray as $categoryNameItem)
         {
@@ -156,12 +156,12 @@ class C4B_XmlImport_Model_CategoryCreator
         $category->setIsActive(true);
         $category->setPath($categoryParentPath);
         $category->setDisplayMode( Mage_Catalog_Model_Category::DM_PRODUCT );
-        
+
         Mage::dispatchEvent( self::EVENT_MISSING_CATEGORY_CREATED, array('category' => $category) );
 
         try {
             $category->save();
-            $messageHandler->addNotice("Created category {$categoryName}");
+            $importReport->notice("Created category {$categoryName}");
         } catch (Exception $e)
         {
             Mage::logException($e);
@@ -172,7 +172,7 @@ class C4B_XmlImport_Model_CategoryCreator
         $this->_categories[$categoryName] = $categoryId;
         return $categoryId;
     }
-    
+
     /**
      * Get the category path prefix. It consists of the constant 1 and the ID of the root category that is configured.
      * @return string

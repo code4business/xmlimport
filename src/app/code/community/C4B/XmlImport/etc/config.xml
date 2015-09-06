@@ -60,4 +60,11 @@
             </preprocessing>
         </c4b_xmlimport>
     </default>
+    <phpunit>
+        <suite>
+            <modules>
+                <C4B_XmlImport />
+            </modules>
+        </suite>
+    </phpunit>
 </config>

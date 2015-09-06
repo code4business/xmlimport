@@ -1,6 +1,6 @@
 <?php
 /**
- * This class load the xml and gets the data for each product in the xml file.
+ * Validates the syntax and general structure, counts the product nodes and extracts data from each one into an array
  *
  * @category    C4B
  * @package     C4B_XmlImport
@@ -9,15 +9,15 @@
  * @copyright   code4business Software GmbH
  */
 class C4B_XmlImport_Model_Products
-{    
+{
     const VALIDATION_RESULT_FILE_ERROR = 0;
     const VALIDATION_RESULT_OK = 1;
     const VALIDATION_RESULT_NO_ROOT_NODE = 2;
     const VALIDATION_RESULT_NO_PRODUCT_NODES = 3;
-    
+
     const XML_NODE_NAME_ROOT = 'products';
     const XML_NODE_NAME_PRODUCT = 'product';
-    
+
     /**
      * Validate XML file for syntax errors and basic node presence.
      * @param string $filePath
@@ -25,8 +25,8 @@ class C4B_XmlImport_Model_Products
      */
     public function validateFile($filePath)
     {
-        /* @var $messageHandler C4B_ProductImport_Model_MessageHandler */
-        $messageHandler = Mage::getSingleton('xmlimport/messageHandler');
+        /** @var C4B_XmlImport_Model_Importer_Report $importReport */
+        $importReport = Mage::getSingleton('xmlimport/importer_report');
         $result = self::VALIDATION_RESULT_OK;
         $nodeCount = 0;
         $xmlParser = xml_parser_create();
@@ -43,13 +43,13 @@ class C4B_XmlImport_Model_Products
             {
                 if( !xml_parse($xmlParser, $readData, feof($xmlFile)) )
                 {
-                    $messageHandler->addErrorsForFile(
-                        basename($filePath), ' ',
+                    $importReport->error(
                         sprintf('XML Syntax error: %s at line %d, column %d.',
                             xml_error_string(xml_get_error_code($xmlParser)),
                             xml_get_current_line_number($xmlParser),
                             xml_get_current_column_number($xmlParser)
-                        )
+                        ),
+                        basename($filePath)
                     );
                     $result = self::VALIDATION_RESULT_FILE_ERROR;
                 }
@@ -58,7 +58,7 @@ class C4B_XmlImport_Model_Products
             if( $result == self::VALIDATION_RESULT_OK)
             {
                 $xmlReader->open($filePath);
-                if (!$xmlReader->next('products'))
+                if (!$xmlReader->next(static::XML_NODE_NAME_ROOT))
                 {
                     $result = self::VALIDATION_RESULT_NO_ROOT_NODE;
                 } else
@@ -69,7 +69,7 @@ class C4B_XmlImport_Model_Products
 
         } catch(Exception $e)
         {
-            $messageHandler->addErrorsForFile(basename($filePath), ' ', $e->getMessage());
+            $importReport->error( $e->getMessage(), basename($filePath) );
         }
 
         $xmlReader->close();
@@ -82,20 +82,21 @@ class C4B_XmlImport_Model_Products
         }
         else if( $result == self::VALIDATION_RESULT_OK)
         {
-            $messageHandler->addNotice("File contains {$nodeCount} product nodes");
+            $importReport->notice("File contains {$nodeCount} product nodes");
         }
 
         return $result;
     }
-    
+
     /**
      * Processes given xml file by iterating over product nodes and extracting data into array
      * @param string $filePath
-     * @return boolean
+     * @return array
      */
     public function processFile($filePath)
     {
-        $messageHandler = Mage::getSingleton('xmlimport/messageHandler');
+        /** @var C4B_XmlImport_Model_Importer_Report $importReport */
+        $importReport = Mage::getSingleton('xmlimport/importer_report');
         /* @var $productBuilder C4B_XmlImport_Model_Products_ProductBuilder */
         $productBuilder = Mage::getModel('xmlimport/products_productBuilder');
         $productNodePosition = 0;
@@ -112,11 +113,11 @@ class C4B_XmlImport_Model_Products
             $productData = $productBuilder->getProductData( $xmlReader->expand() );
             if( count($productBuilder->getErrors()) > 0 )
             {
-                $messageHandler->addError("Product at position {$productNodePosition} has errors:");
+                $importReport->error("Product at position {$productNodePosition} has errors:");
             }
             if($productData == null)
             {
-                $messageHandler->addError('Product will not be imported');
+                $importReport->error('Product will not be imported');
             } else
             {
                 foreach ($productData as $productDataRow)
@@ -124,9 +125,9 @@ class C4B_XmlImport_Model_Products
                     $products[] = $productDataRow;
                 }
             }
-            $messageHandler->addErrorsForFile( basename($filePath), $productNodePosition, $productBuilder->getErrors() );
+            $importReport->error( $productBuilder->getErrors(), basename($filePath) );
         }
-        
+
         return $products;
     }
 
@@ -141,7 +142,7 @@ class C4B_XmlImport_Model_Products
         $nodeCount = 0;
         while( $xmlReader->read() )
         {
-            if($xmlReader->nodeType == XMLReader::ELEMENT && $xmlReader->name == 'product')
+            if($xmlReader->nodeType == XMLReader::ELEMENT && $xmlReader->name == static::XML_NODE_NAME_PRODUCT)
             {
                 $nodeCount++;
             }

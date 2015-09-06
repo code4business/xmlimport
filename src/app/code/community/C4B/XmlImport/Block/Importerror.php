@@ -18,7 +18,7 @@ class C4B_XmlImport_Block_Importerror extends Mage_Core_Block_Template
     {
         $this->setTemplate('c4b/xmlimport/importreport.phtml');
     }
-    
+
     /**
      * Gets the original imported file count in the result import.
      * @return int
@@ -28,7 +28,7 @@ class C4B_XmlImport_Block_Importerror extends Mage_Core_Block_Template
         $resultData = $this->getData('result_data');
         return $resultData['count_import_files'];
     }
-    
+
     /**
      * Gets the number of imported files that have errors.
      * @return int
@@ -38,7 +38,7 @@ class C4B_XmlImport_Block_Importerror extends Mage_Core_Block_Template
         $resultData = $this->getData('result_data');
         return $resultData['count_error_import_files'];
     }
-    
+
     /**
      * Returns all the file import reports that have errors.
      * @return array C4B_CommandLineImporter_Model_Results
@@ -48,7 +48,7 @@ class C4B_XmlImport_Block_Importerror extends Mage_Core_Block_Template
         $resultData = $this->getData('result_data');
         return $resultData['errors'];
     }
-    
+
     /**
      * Returns the timestamp when importing was started.
      * @return string
@@ -58,7 +58,7 @@ class C4B_XmlImport_Block_Importerror extends Mage_Core_Block_Template
         $resultData = $this->getData('result_data');
         return $resultData['start_time'];
     }
-    
+
     /**
      * Returns the time taken to import the files in seconds.
      * @return int
@@ -67,15 +67,5 @@ class C4B_XmlImport_Block_Importerror extends Mage_Core_Block_Template
     {
         $resultData = $this->getData('result_data');
         return $resultData['time_taken'];
-    }
-    
-    /**
-     * Returns the total amount of memory used in importing
-     * @return string
-     */
-    public function getMemoryUsed()
-    {
-        $resultData = $this->getData('result_data');
-        return $resultData['memory_used'];
     }
 }

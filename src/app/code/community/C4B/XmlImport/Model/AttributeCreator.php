@@ -15,7 +15,7 @@ class C4B_XmlImport_Model_AttributeCreator
 
     const XML_PATH_PREPROCESSING_CREATE_ATTRIBUTES = 'c4b_xmlimport/preprocessing/create_attributes';
     const XML_PATH_PREPROCESSING_IGNORED_NEW_ATTRIBUTES = 'c4b_xmlimport/preprocessing/ignored_new_attributes';
-    
+
     const EVENT_MISSING_ATTRIBUTE_CREATED = 'c4b_xmlimport_missing_attribute_created';
 
     /**
@@ -38,14 +38,14 @@ class C4B_XmlImport_Model_AttributeCreator
                 //Stock Data attributes
                 'manage_stock', 'use_config_manage_stock', 'qty', 'min_qty', 'use_config_min_qty', 'min_sale_qty','use_config_min_sale_qty',
                 'max_sale_qty', 'use_config_max_sale_qty', 'is_qty_decimal', 'backorders', 'use_config_backorders', 'notify_stock_qty',
-                'use_config_notify_stock_qty', 'enable_qty_increments', 'use_config_enable_qty_inc', 'qty_increments', 
+                'use_config_notify_stock_qty', 'enable_qty_increments', 'use_config_enable_qty_inc', 'qty_increments',
                 'use_config_qty_increments', 'is_in_stock', 'low_stock_date', 'stock_status_changed_auto', 'is_decimal_divided'
         );
-        
+
         $attributesToIgnore = explode(',', Mage::getStoreConfig(self::XML_PATH_PREPROCESSING_IGNORED_NEW_ATTRIBUTES));
-        
+
         $existingAttributes = Mage::getSingleton('eav/config')->getEntityType(Mage_Catalog_Model_Product::ENTITY)->getAttributeCollection();
-        
+
         /* @var $existingAttributes Mage_Catalog_Model_Resource_Eav_Mysql4_Attribute_Collection */
         foreach ( $existingAttributes as $attribute )
         {
@@ -59,20 +59,21 @@ class C4B_XmlImport_Model_AttributeCreator
         {
             $this->_existingAttributes[strtolower($attributeCode)] = 1;
         }
-        
-        
+
+
     }
 
     /**
      * Creates the specified attribute if it doesn't exist.
-     * @param string $attributeName
+     * @param string $attributeCode
      * @return C4B_XmlImport_Model_AttributeCreator | int
      */
     public function createIfNotExists($attributeCode)
     {
         $attributeCode = strtolower($attributeCode);
-        $messageHandler = Mage::getSingleton('xmlimport/messageHandler');
-        
+        /** @var C4B_XmlImport_Model_Importer_Report $importReport */
+        $importReport = Mage::getSingleton('xmlimport/importer_report');
+
         if( isset($this->_existingAttributes[$attributeCode]) )
         {
             return true;
@@ -82,12 +83,12 @@ class C4B_XmlImport_Model_AttributeCreator
                 Mage::getStoreConfig(self::XML_PATH_PREPROCESSING_CREATE_ATTRIBUTES) ==
                 C4B_XmlImport_Model_Source_Attribute_ProcessingMode::PROCESSING_MODE_CREATE_AND_INFORM
         );
-        
+
         if(!$createAttributes)
         {
             if(!array_key_exists($attributeCode, $this->_missingAttributes))
             {
-                $messageHandler->addNotice("Attribute '{$attributeCode}' does not exist and won't be imported.");
+                $importReport->notice("Attribute '{$attributeCode}' does not exist and won't be imported.");
             }
             $this->_missingAttributes[$attributeCode] = 1;
             return false;
@@ -115,15 +116,15 @@ class C4B_XmlImport_Model_AttributeCreator
                 'apply_to' => 'simple',
                 'default' => '0'
         ));
-        
+
         Mage::dispatchEvent( self::EVENT_MISSING_ATTRIBUTE_CREATED, array('attribute' => $newAttribute) );
-        
+
         $newAttribute->save();
         $this->_missingAttributes[$attributeCode] = 1;
         $this->_existingAttributes[$attributeCode] = 1;
-        
-        $messageHandler->addNotice("Created attribute {$attributeCode}.");
-        
+
+        $importReport->notice("Created attribute {$attributeCode}.");
+
         return true;
     }
 
