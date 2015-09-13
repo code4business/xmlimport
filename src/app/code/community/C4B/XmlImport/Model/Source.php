@@ -8,7 +8,7 @@
  * @author      Dominik Meglic <meglic@code4business.de>
  * @copyright   code4business Software GmbH
  */
-class C4B_XmlImport_Model_Products
+class C4B_XmlImport_Model_Source
 {
     const VALIDATION_RESULT_FILE_ERROR = 0;
     const VALIDATION_RESULT_OK = 1;
@@ -97,8 +97,8 @@ class C4B_XmlImport_Model_Products
     {
         /** @var C4B_XmlImport_Model_Importer_Report $importReport */
         $importReport = Mage::getSingleton('xmlimport/importer_report');
-        /* @var $productBuilder C4B_XmlImport_Model_Products_ProductBuilder */
-        $productBuilder = Mage::getModel('xmlimport/products_productBuilder');
+        /* @var $productBuilder C4B_XmlImport_Model_Source_ProductBuilder */
+        $productBuilder = Mage::getModel('xmlimport/source_productBuilder');
         $productNodePosition = 0;
         $xmlReader = new XMLReader();
         $xmlReader->open($filePath);

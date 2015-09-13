@@ -8,7 +8,7 @@
  * @author      Dominik Meglic <meglic@code4business.de>
  * @copyright   code4business Software GmbH
  */
-class C4B_XmlImport_Model_AttributeCreator
+class C4B_XmlImport_Model_Source_ProductBuilder_AttributeCreator
 {
     protected $_existingAttributes = array();
     protected $_missingAttributes = array();
@@ -66,7 +66,7 @@ class C4B_XmlImport_Model_AttributeCreator
     /**
      * Creates the specified attribute if it doesn't exist.
      * @param string $attributeCode
-     * @return C4B_XmlImport_Model_AttributeCreator | int
+     * @return C4B_XmlImport_Model_Source_ProductBuilder_AttributeCreator | int
      */
     public function createIfNotExists($attributeCode)
     {

@@ -181,7 +181,7 @@ class C4B_XmlImport_Model_Importer_Report extends Varien_Object
             $recipients['emails'][] = $recipient['email'];
         }
 
-        $missingAttributes = Mage::getSingleton('xmlimport/attributeCreator')->getMissingAttributes();
+        $missingAttributes = Mage::getSingleton('xmlimport/source_productBuilder_attributeCreator')->getMissingAttributes();
 
         if( (count($this->_error) == 0 && count($missingAttributes) == 0) || count($recipients) == 0)
         {

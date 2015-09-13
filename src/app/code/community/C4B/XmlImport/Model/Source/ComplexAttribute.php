@@ -8,8 +8,8 @@
  * @author      Dominik Meglic <meglic@code4business.de>
  * @copyright   code4business Software GmbH
  */
-class C4B_XmlImport_Model_Products_ComplexAttribute
-{    
+class C4B_XmlImport_Model_Source_ComplexAttribute
+{
     /**
      * get complex attribute value from the given node.
      * @param SimpleXMLElement $complexDataXmlNode
@@ -23,7 +23,7 @@ class C4B_XmlImport_Model_Products_ComplexAttribute
         }
         return $this->_processXmlNode($complexDataXmlNode);
     }
-    
+
     /**
      * Process the xml node, extract and format values from it and return it.
      * @param SimpleXMLElement $complexDataXmlNode
@@ -49,7 +49,7 @@ class C4B_XmlImport_Model_Products_ComplexAttribute
         }
         return $attributeData;
     }
-    
+
     /**
      * Validate if children have same number of children.
      * @param SimpleXMLElement $complexDataXmlNode
@@ -71,7 +71,7 @@ class C4B_XmlImport_Model_Products_ComplexAttribute
                 foreach($enumItem->children() as $nodeName => $enumItemChild)
                 {
                     $expectedChildrenCount++;
-                    $expectedChildren[$nodeName] = true; 
+                    $expectedChildren[$nodeName] = true;
                 }
                 continue;
             }

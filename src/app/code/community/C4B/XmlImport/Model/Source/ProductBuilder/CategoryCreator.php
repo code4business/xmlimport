@@ -8,7 +8,7 @@
  * @author      Dominik Meglic <meglic@code4business.de>
  * @copyright   code4business Software GmbH
  */
-class C4B_XmlImport_Model_CategoryCreator
+class C4B_XmlImport_Model_Source_ProductBuilder_CategoryCreator
 {
     const EVENT_MISSING_CATEGORY_CREATED = 'c4b_xmlimport_missing_category_created';
 
@@ -28,7 +28,7 @@ class C4B_XmlImport_Model_CategoryCreator
     /**
      * Creates the specified category if it doesn't exist.
      * @param string $categoryName
-     * @return C4B_XmlImport_Model_CategoryCreator|int
+     * @return C4B_XmlImport_Model_Source_ProductBuilder_CategoryCreator|int
      */
     public function createIfItNotExists($categoryName)
     {

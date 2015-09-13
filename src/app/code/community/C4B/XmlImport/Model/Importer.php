@@ -96,8 +96,8 @@ class C4B_XmlImport_Model_Importer
     {
         /** @var C4B_XmlImport_Model_Importer_Report $importReport */
         $importReport = Mage::getSingleton('xmlimport/importer_report');
-        /* @var $products C4B_XmlImport_Model_Products */
-        $products = Mage::getModel('xmlimport/products');
+        /* @var $products C4B_XmlImport_Model_Source */
+        $products = Mage::getModel('xmlimport/source');
 
         $importReport->notice("Validating file structure.");
         $validationResult = $products->validateFile($filePath);
@@ -105,18 +105,18 @@ class C4B_XmlImport_Model_Importer
         $success = false;
         switch($validationResult)
         {
-            case C4B_XmlImport_Model_Products::VALIDATION_RESULT_FILE_ERROR:
+            case C4B_XmlImport_Model_Source::VALIDATION_RESULT_FILE_ERROR:
                 $importReport->error('File has syntax errors.');
                 break;
-            case C4B_XmlImport_Model_Products::VALIDATION_RESULT_NO_ROOT_NODE:
+            case C4B_XmlImport_Model_Source::VALIDATION_RESULT_NO_ROOT_NODE:
                 $importReport->error('File is missing the root node.');
                 $success = true;
                 break;
-            case C4B_XmlImport_Model_Products::VALIDATION_RESULT_NO_PRODUCT_NODES:
+            case C4B_XmlImport_Model_Source::VALIDATION_RESULT_NO_PRODUCT_NODES:
                 $importReport->notice('File has no product nodes.');
                 $success = true;
                 break;
-            case C4B_XmlImport_Model_Products::VALIDATION_RESULT_OK:
+            case C4B_XmlImport_Model_Source::VALIDATION_RESULT_OK:
                 $importReport->notice("File structure valid.");
 
                 $importReport->notice("Preparing data.");
