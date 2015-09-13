@@ -35,14 +35,6 @@
                 <class>C4B_XmlImport_Helper</class>
             </xmlimport>
         </helpers>
-        <resources>
-            <xmlimport_setup>
-                <setup>
-                    <module>C4B_XmlImport</module>
-                    <class>Mage_Core_Model_Resource_Setup</class>
-                </setup>
-            </xmlimport_setup>
-        </resources>
         <template>
             <email>
                 <xmlimport_notifications_report_template>
