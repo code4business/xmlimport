@@ -14,7 +14,7 @@ class C4B_XmlImport_Test_Model_Importer_Report extends EcomDev_PHPUnit_Test_Case
     /**
      * @test
      */
-    public function test_messageReported_messageGetsLogged()
+    public function test_reportedNoticeIsLogged()
     {
         /** @var C4B_XmlImport_Model_Importer_Report $importerReport */
         $importerReport = Mage::getSingleton('xmlimport/importer_report');
@@ -27,7 +27,7 @@ class C4B_XmlImport_Test_Model_Importer_Report extends EcomDev_PHPUnit_Test_Case
     /**
      * @test
      */
-    public function test_errorReported_savedAsError()
+    public function test_reportedErrorIsLogged()
     {
         /** @var C4B_XmlImport_Model_Importer_Report $importerReport */
         $importerReport = Mage::getSingleton('xmlimport/importer_report');
@@ -48,7 +48,7 @@ class C4B_XmlImport_Test_Model_Importer_Report extends EcomDev_PHPUnit_Test_Case
     /**
      * @test
      */
-    public function test_errorReportedInArea_savedAsErrorInArea()
+    public function test_errorIsReportedInGivenArea()
     {
         /** @var C4B_XmlImport_Model_Importer_Report $importerReport */
         $importerReport = Mage::getSingleton('xmlimport/importer_report');
