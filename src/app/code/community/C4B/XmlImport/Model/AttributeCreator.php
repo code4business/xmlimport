@@ -42,7 +42,7 @@ class C4B_XmlImport_Model_AttributeCreator
                 'use_config_qty_increments', 'is_in_stock', 'low_stock_date', 'stock_status_changed_auto', 'is_decimal_divided'
         );
 
-        $attributesToIgnore = explode(',', Mage::getStoreConfig(self::XML_PATH_PREPROCESSING_IGNORED_NEW_ATTRIBUTES));
+        $attributesToIgnore = explode(',', Mage::getStoreConfig(static::XML_PATH_PREPROCESSING_IGNORED_NEW_ATTRIBUTES));
 
         $existingAttributes = Mage::getSingleton('eav/config')->getEntityType(Mage_Catalog_Model_Product::ENTITY)->getAttributeCollection();
 
@@ -79,10 +79,7 @@ class C4B_XmlImport_Model_AttributeCreator
             return true;
         }
 
-        $createAttributes = (
-                Mage::getStoreConfig(self::XML_PATH_PREPROCESSING_CREATE_ATTRIBUTES) ==
-                C4B_XmlImport_Model_Source_Attribute_ProcessingMode::PROCESSING_MODE_CREATE_AND_INFORM
-        );
+        $createAttributes = Mage::getStoreConfigFlag(static::XML_PATH_PREPROCESSING_CREATE_ATTRIBUTES);
 
         if(!$createAttributes)
         {
@@ -117,7 +114,7 @@ class C4B_XmlImport_Model_AttributeCreator
                 'default' => '0'
         ));
 
-        Mage::dispatchEvent( self::EVENT_MISSING_ATTRIBUTE_CREATED, array('attribute' => $newAttribute) );
+        Mage::dispatchEvent( static::EVENT_MISSING_ATTRIBUTE_CREATED, array('attribute' => $newAttribute) );
 
         $newAttribute->save();
         $this->_missingAttributes[$attributeCode] = 1;
