@@ -63,4 +63,25 @@ class C4B_XmlImport_Test_Model_Importer_Report extends EcomDev_PHPUnit_Test_Case
         $this->assertArrayHasKey('importfile.xml', $loggedErrors);
         $this->assertContains('Error in file', $loggedErrors['importfile.xml']);
     }
+
+    /**
+     * @test
+     */
+    public function test_messagesGetPrintedToStdout()
+    {
+        /** @var C4B_XmlImport_Model_Importer_Report $importerReport */
+        $importerReport = Mage::getSingleton('xmlimport/importer_report');
+
+        ob_clean();
+        ob_start();
+        $importerReport->notice('Notice not printed to stdout.');
+        $importerReport->error('Errot not printed to stdout.');
+        $this->assertEmpty( ob_get_clean() );
+
+        $importerReport->setIsMessageToStdout(true);
+        ob_start();
+        $importerReport->notice('Notice printed to stdout.');
+        $importerReport->error('Errot printed to stdout.');
+        $this->assertNotEmpty( ob_get_clean() );
+    }
 }

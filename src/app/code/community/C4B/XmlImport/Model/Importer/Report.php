@@ -10,12 +10,14 @@
  * @copyright   code4business Software GmbH
  *
  * @method int getStartMicroTime()
- * @method C4B_XmlImport_Model_Importer_Report setStartMicroTime(int)
+ * @method C4B_XmlImport_Model_Importer_Report setStartMicroTime(int $time)
  * @method string getStartTimestamp()
- * @method C4B_XmlImport_Model_Importer_Report setStartTimestamp(string)
+ * @method C4B_XmlImport_Model_Importer_Report setStartTimestamp(string $timestamp)
  * @method string getTimeTaken()
- * @method C4B_XmlImport_Model_Importer_Report setTimeTaken(string)
+ * @method C4B_XmlImport_Model_Importer_Report setTimeTaken(int $time)
  * @method int getImportFileCount()
+ * @method C4B_XmlImport_Model_Importer_Report setIsMessageToStdout(boolean $flag)
+ * @method boolean getIsMessageToStdout()
  */
 class C4B_XmlImport_Model_Importer_Report extends Varien_Object
 {
@@ -48,6 +50,7 @@ class C4B_XmlImport_Model_Importer_Report extends Varien_Object
         $this->_error = array();
         $this->_dateTime = new DateTime('now', new DateTimeZone(Mage::getStoreConfig('general/locale/timezone')));
         $this->_logFile = static::LOG_FILE_NAME;
+        $this->setIsMessageToStdout(false);
     }
 
     /**
@@ -155,7 +158,10 @@ class C4B_XmlImport_Model_Importer_Report extends Varien_Object
         } else
         {
             $this->_dateTime->setTimestamp(time());
-            echo "[{$this->_dateTime->format('Y-m-d H:i:s')}] {$message}\n";
+            if( $this->getIsMessageToStdout() )
+            {
+                echo "[{$this->_dateTime->format('Y-m-d H:i:s')}] {$message}\n";
+            }
             Mage::log($message, $logLevel, $this->_logFile);
         }
     }

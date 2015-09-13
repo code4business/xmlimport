@@ -79,6 +79,15 @@ class C4B_XmlImport_Model_Importer
     }
 
     /**
+     * Set display of messages to stdout one or off.
+     * @param boolean $flag
+     */
+    public function setPrintMessageToStdout($flag)
+    {
+        Mage::getSingleton('xmlimport/importer_report')->setIsMessageToStdout($flag);
+    }
+
+    /**
      * Import given XML file.
      * @param string $filePath
      * @return boolean|C4B_XmlImport_Model_Importer|number

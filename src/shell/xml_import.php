@@ -12,15 +12,21 @@ require_once 'abstract.php';
  * @copyright   code4business Software GmbH
  */
 class C4B_XmlImport_Importer extends Mage_Shell_Abstract {
-    
+
     /**
      * Start import process
      *
      */
-    public function run() 
+    public function run()
     {
-         /* @var $importer C4B_XmlImport_Model_Importer */ 
+         /* @var $importer C4B_XmlImport_Model_Importer */
          $importer = Mage::getModel('xmlimport/importer');
+
+        if( $this->getArg('v') )
+        {
+            $importer->setPrintMessageToStdout(true);
+        }
+
          $importer->run();
     }
 
@@ -31,7 +37,9 @@ class C4B_XmlImport_Importer extends Mage_Shell_Abstract {
     public function usageHelp()
     {
         return <<<USAGE
-Usage:  php xml_import.php
+Usage:  php xml_import.php -- [OPTIONS]
+
+  -v  Print messages to stdout
 
 USAGE;
     }
