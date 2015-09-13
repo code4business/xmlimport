@@ -319,11 +319,18 @@ class C4B_XmlImport_Model_Source_ProductBuilder
         $categoryCreator = Mage::getSingleton('xmlimport/source_productBuilder_categoryCreator');
         foreach( $productComplexData['_category'] as $key => $category )
         {
-            if( $categoryCreator->createIfItNotExists($category) == null )
+            if( $categoryCreator->createIfItNotExists($category) == false )
             {
                 unset($productComplexData['_category'][$key]);
             }
-            $this->_errors = array_merge( $this->_errors, $categoryCreator->getErrors() );
+
+            foreach($categoryCreator->getMessages() as $messageData)
+            {
+                if( $messageData['type'] == 'error' )
+                {
+                    $this->_errors[] = $messageData['message'];
+                }
+             }
         }
         return $productComplexData;
     }

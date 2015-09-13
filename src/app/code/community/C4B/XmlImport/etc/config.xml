@@ -58,6 +58,7 @@
             <preprocessing>
                 <create_category>1</create_category>
                 <create_attributes>0</create_attributes>
+                <root_category>2</root_category>
             </preprocessing>
             <notifications>
                     <report_template>xmlimport_notifications_report_template</report_template>

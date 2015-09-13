@@ -1,11 +1,11 @@
 <?php
 /**
- * This class creates missing categories.
+ * This class handles creation of missing categories.
  *
  * @category    C4B
  * @package     C4B_XmlImport
  * @license     http://opensource.org/licenses/osl-3.0.php Open Software Licence 3.0 (OSL-3.0)
- * @author      Dominik Meglic <meglic@code4business.de>
+ * @author      Dominik Meglič <meglic@code4business.de>
  * @copyright   code4business Software GmbH
  */
 class C4B_XmlImport_Model_Source_ProductBuilder_CategoryCreator
@@ -14,8 +14,18 @@ class C4B_XmlImport_Model_Source_ProductBuilder_CategoryCreator
 
     const XML_PATH_ROOT_CATEGORY_ID = 'c4b_xmlimport/preprocessing/root_category';
 
+    /**
+     * All existing categories
+     *
+     * @var array [NAME_PATH => ID]
+     */
     protected $_categories = array();
-    protected $_errors = array();
+    /**
+     * Reported messages
+     *
+     * @var array
+     */
+    protected $_messages = array();
 
     /**
      * Default constructor.
@@ -26,28 +36,78 @@ class C4B_XmlImport_Model_Source_ProductBuilder_CategoryCreator
     }
 
     /**
-     * Creates the specified category if it doesn't exist.
-     * @param string $categoryName
-     * @return C4B_XmlImport_Model_Source_ProductBuilder_CategoryCreator|int
+     * Create the specified category and any missing parents from category name path.
+     *
+     * @param string $categoryNamePath
+     * @return boolean
      */
-    public function createIfItNotExists($categoryName)
+    public function createIfItNotExists($categoryNamePath)
     {
-        if( !isset($this->_categories[$categoryName]) )
+        $this->_messages = array();
+        if( isset($this->_categories[$categoryNamePath]) )
         {
-            return $this->_createCategoryRecursively($categoryName) != null;
+            return true;
+        }
+
+        $categoryPathParts = explode('/', $categoryNamePath);
+
+        $currentCategoryPath = '';
+        $currentCategoryPathIds = '1/' . Mage::getStoreConfig(static::XML_PATH_ROOT_CATEGORY_ID);
+
+        foreach($categoryPathParts as $categoryName)
+        {
+            $currentCategoryPath = $currentCategoryPath . '/' . $categoryName;
+
+            if( empty($categoryName) )
+            {
+                $this->_messages[] = array(
+                    'message' => "Category [{$categoryNamePath}] can not have empty path parts.",
+                    'type' => 'error'
+                );
+                return false;
+            }
+
+            if( !isset($this->_categories[$currentCategoryPath]) )
+            {
+                /* @var $category Mage_Catalog_Model_Category */
+                $category = Mage::getModel('catalog/category');
+                $category->setName($categoryName);
+                $category->setIsActive(true);
+                $category->setPath($currentCategoryPathIds);
+                $category->setDisplayMode( Mage_Catalog_Model_Category::DM_PRODUCT );
+
+                Mage::dispatchEvent( static::EVENT_MISSING_CATEGORY_CREATED, array('category' => $category) );
+
+                try {
+                    $category->save();
+                    $this->_messages[] = array(
+                        'message' => "Created category {$categoryName}",
+                        'type' => 'notice'
+                    );
+                } catch (Exception $e)
+                {
+                    Mage::logException($e);
+                    $this->_messages[] = array(
+                        'message' => "Category with name {$categoryName} and path {$currentCategoryPath} can not be saved.",
+                        'type' => 'error'
+                    );
+                    return false;
+                }
+
+                $this->_categories[$currentCategoryPath] = $category->getId();
+            }
+            $currentCategoryPathIds = $currentCategoryPathIds . "/{$this->_categories[$currentCategoryPath]}";
         }
         return true;
     }
 
     /**
-     * Retreive an array of messages that were generated during creation of categories and delete.
+     * Get the reported messages.
      * @return array
      */
-    public function getErrors()
+    public function getMessages()
     {
-        $errors = $this->_errors;
-        $this->_errors = array();
-        return $errors;
+        return $this->_messages;
     }
 
     /**
@@ -89,96 +149,5 @@ class C4B_XmlImport_Model_Source_ProductBuilder_CategoryCreator
                 $this->_categories[$category->getId()] = $category->getId();
             }
         }
-    }
-
-    /**
-     * Create nonexistent category and all nonexistent parents recursively.
-     * @param string $categoryName Name of category E.g. Kategorien/Keramic/Hersteller5
-     * @return int|null
-     */
-    protected function _createCategoryRecursively($categoryName)
-    {
-        /* @var $importReport C4B_XmlImport_Model_Importer_Report */
-        $importReport = Mage::getSingleton('xmlimport/importer_report');
-        if (trim($categoryName) == '')
-        {
-            return null;
-        }
-
-        $categoryPathArray = explode('/', $categoryName);
-
-        // Check that category path does not have empty element names.
-        foreach($categoryPathArray as $categoryNameItem)
-        {
-            if(empty($categoryNameItem))
-            {
-                $this->_errors[] ="Category [{$categoryName}] can not have empty path parts.";
-                return null;
-            }
-        }
-        $newCategoryName = array_pop($categoryPathArray);
-        $categoryParentPath = implode('/',$categoryPathArray);
-
-        // If current category's parent category does not exist - create it recursively.
-        if( !isset($this->_categories[$categoryParentPath]) )
-        {
-            if( $this->_createCategoryRecursively($categoryParentPath) == null )
-            {
-                return null;
-            }
-        }
-
-        $pathPrefix = '';
-        // Recreate category path.
-        $categoryParentIds = array();
-        foreach($categoryPathArray as $categoryPathItem) //Put check for existence of category id
-        {
-            if(isset($this->_categories[$pathPrefix . $categoryPathItem]))
-            {
-                $categoryParentIds[] = $this->_categories[$pathPrefix . $categoryPathItem];
-            }else{
-                $this->_errors[] = "Category path does not have needed links {$pathPrefix}  {$categoryPathItem}";
-            }
-            $pathPrefix .= $categoryPathItem . '/';
-        }
-
-        if( count($categoryParentIds) > 0 )
-        {
-            $categoryParentPath = $this->_getCategoryPathPrefix() . '/' . implode('/', $categoryParentIds);
-        }else
-        {
-            $categoryParentPath = $this->_getCategoryPathPrefix();
-        }
-        // Create a category
-        /* @var $category Mage_Catalog_Model_Category */
-        $category = Mage::getModel('catalog/category');
-        $category->setName($newCategoryName);
-        $category->setIsActive(true);
-        $category->setPath($categoryParentPath);
-        $category->setDisplayMode( Mage_Catalog_Model_Category::DM_PRODUCT );
-
-        Mage::dispatchEvent( self::EVENT_MISSING_CATEGORY_CREATED, array('category' => $category) );
-
-        try {
-            $category->save();
-            $importReport->notice("Created category {$categoryName}");
-        } catch (Exception $e)
-        {
-            Mage::logException($e);
-            Mage::throwException("Category with name {$newCategoryName} and path {$categoryParentPath} can not be saved.");
-        }
-
-        $categoryId = $category->getId();
-        $this->_categories[$categoryName] = $categoryId;
-        return $categoryId;
-    }
-
-    /**
-     * Get the category path prefix. It consists of the constant 1 and the ID of the root category that is configured.
-     * @return string
-     */
-    protected function _getCategoryPathPrefix()
-    {
-        return '1/' . Mage::getStoreConfig(self::XML_PATH_ROOT_CATEGORY_ID);
     }
 }
