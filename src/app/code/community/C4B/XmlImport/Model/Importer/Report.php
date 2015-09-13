@@ -21,10 +21,8 @@ class C4B_XmlImport_Model_Importer_Report extends Varien_Object
 {
     const LOG_FILE_NAME = 'import.log';
 
-    const XML_PATH_NOTIFICATIONS_MISSING_ATTRIBUTES_RECIPIENTS = 'c4b_xmlimport/notifications/missing_attributes_recipients';
-    const XML_PATH_NOTIFICATIONS_MISSING_ATTRIBUTES_EMAIL_TEMPLATE = 'c4b_xmlimport/notifications/missing_attributes_template';
-    const XML_PATH_NOTIFICATIONS_IMPORT_ERROR_RECIPIENTS = 'c4b_xmlimport/notifications/import_error_receipients';
-    const XML_PATH_NOTIFICATIONS_IMPORT_ERROR_EMAIL_TEMPLATE = 'c4b_xmlimport/notifications/import_error_template';
+    const XML_PATH_NOTIFICATIONS_REPORT_RECIPIENTS = 'c4b_xmlimport/notifications/report_recipients';
+    const XML_PATH_NOTIFICATIONS_REPORT_EMAIL_TEMPLATE = 'c4b_xmlimport/notifications/report_template';
 
     /**
      * @var string
@@ -98,19 +96,19 @@ class C4B_XmlImport_Model_Importer_Report extends Varien_Object
     {
         $this->_message($message, 'error', Zend_Log::ERR, $area);
 
-        if (!isset($this->_error[$area]))
+        if( !isset($this->_error[$area]) && !empty($message) )
         {
             $this->_error[$area] = array();
         }
 
-        if (!is_array($message))
+        if( !is_array($message) )
         {
             $message = array($message);
         }
 
         foreach($message as $singleMessage)
         {
-            $this->_error[$area] = $singleMessage;
+            $this->_error[$area][] = $singleMessage;
         }
     }
 
@@ -124,8 +122,7 @@ class C4B_XmlImport_Model_Importer_Report extends Varien_Object
         $this->notice("Time taken: {$this->getTimeTaken()} s");
         $this->notice('Import process done.');
 
-        $this->_sendErrorReport();
-        $this->_sendAttributesReport();
+        $this->_sendReportIfNecessary();
     }
 
     /**
@@ -164,82 +161,44 @@ class C4B_XmlImport_Model_Importer_Report extends Varien_Object
     }
 
     /**
-     * Send an email with missing attributes report to recipients who are configured.
-     */
-    protected function _sendAttributesReport()
-    {
-        /* @var $attributeCreator C4B_XmlImport_Model_AttributeCreator */
-        $attributeCreator = Mage::getSingleton('xmlimport/attributeCreator');
-        $missingAttributes = $attributeCreator->getMissingAttributes();
-
-        $recipients = $this->_getRecipients(self::XML_PATH_NOTIFICATIONS_MISSING_ATTRIBUTES_RECIPIENTS);
-
-        if( count($missingAttributes) == 0 || !$recipients)
-        {
-            return $this;
-        }
-
-        /* @var $email Mage_Core_Model_Email_Template */
-        $email = Mage::getModel('core/email_template');
-        $email->sendTransactional(
-            Mage::getStoreConfig(self::XML_PATH_NOTIFICATIONS_MISSING_ATTRIBUTES_EMAIL_TEMPLATE),
-            'general',
-            $recipients['emails'],
-            $recipients['names'],
-            array('attributes' => $missingAttributes,
-                'attributes_created' => Mage::getStoreConfig(C4B_XmlImport_Model_AttributeCreator::XML_PATH_PREPROCESSING_CREATE_ATTRIBUTES),
-                'startTime' => $this->getStartTimestamp()
-            )
-        );
-    }
-
-    /**
-     * Send an email with error report for the product import to recipients who are configured.
+     * Send an email to configured recipients about import errors and/or missing attributes.
+     *
      * @return C4B_XmlImport_Model_Importer_Report
      */
-    protected function _sendErrorReport()
+    protected function _sendReportIfNecessary()
     {
-        $recipients = $this->_getRecipients(self::XML_PATH_NOTIFICATIONS_IMPORT_ERROR_RECIPIENTS);
-        if( count($this->_error) == 0 || !$recipients)
+        $recipientsRaw = unserialize(Mage::getStoreConfig(static::XML_PATH_NOTIFICATIONS_REPORT_RECIPIENTS));
+        $recipients = array();
+        foreach($recipientsRaw as $recipient)
+        {
+            $recipients['names'][] = $recipient['name'];
+            $recipients['emails'][] = $recipient['email'];
+        }
+
+        $missingAttributes = Mage::getSingleton('xmlimport/attributeCreator')->getMissingAttributes();
+
+        if( (count($this->_error) == 0 && count($missingAttributes) == 0) || count($recipients) == 0)
         {
             return $this;
         }
-        $results = array(
+
+        $results = new Varien_Object(array(
             'start_time'                 => $this->getStartTimestamp(),
             'time_taken'                 => $this->getTimeTaken(),
             'count_import_files'         => $this->getImportFileCount(),
             'count_error_import_files'     => count($this->_error),
-            'errors'                    => $this->_error
-        );
+            'errors'                    => $this->_error,
+            'missing_attributes'        => $missingAttributes,
+
+        ));
         /* @var $email Mage_Core_Model_Email_Template */
         $email = Mage::getModel('core/email_template');
         $email->sendTransactional(
-            Mage::getStoreConfig(self::XML_PATH_NOTIFICATIONS_IMPORT_ERROR_EMAIL_TEMPLATE),
+            Mage::getStoreConfig(static::XML_PATH_NOTIFICATIONS_REPORT_EMAIL_TEMPLATE),
             'general',
             $recipients['emails'],
             $recipients['names'],
             array('results' => $results, 'startTime' => $this->getStartTimestamp())
         );
-    }
-
-    /**
-     * Reterive and format the recipients from store config or false if there aren't any.
-     * @param string $path
-     * @return array|boolean
-     */
-    protected function _getRecipients($path)
-    {
-        $recipients = unserialize(Mage::getStoreConfig($path));
-        if($recipients !== null && is_array($recipients) && count($recipients) > 0)
-        {
-            $transformed = array();
-            foreach($recipients as $recipient)
-            {
-                $transformed['names'][] = $recipient['name'];
-                $transformed['emails'][] = $recipient['email'];
-            }
-            return $transformed;
-        }
-        return false;
     }
 }

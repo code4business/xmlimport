@@ -43,6 +43,15 @@
                 </setup>
             </xmlimport_setup>
         </resources>
+        <template>
+            <email>
+                <xmlimport_notifications_report_template>
+                    <label>XmlImport Report</label>
+                    <file>xmlimport_report.html</file>
+                    <type>html</type>
+                </xmlimport_notifications_report_template>
+            </email>
+        </template>
     </global>
     <default>
         <c4b_xmlimport>
@@ -58,6 +67,10 @@
                 <create_category>1</create_category>
                 <create_attributes>0</create_attributes>
             </preprocessing>
+            <notifications>
+                    <report_template>xmlimport_notifications_report_template</report_template>
+                    <report_recipients>a:0:{}</report_recipients>
+            </notifications>
         </c4b_xmlimport>
     </default>
     <phpunit>

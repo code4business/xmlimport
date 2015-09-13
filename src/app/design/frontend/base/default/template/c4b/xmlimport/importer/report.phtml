@@ -1,0 +1,73 @@
+<?php
+/**
+ * Template for displaying reported errors and missing attributes during import.
+ *
+ * @category    C4B
+ * @package     C4B_XmlImport
+ * @license     http://opensource.org/licenses/osl-3.0.php Open Software Licence 3.0 (OSL-3.0)
+ * @author      Dominik Meglič <meglic@code4business.de>
+ * @copyright   code4business Software GmbH
+ */
+
+/* @var $this C4B_XmlImport_Block_Importer_Report */
+?>
+<h2><?php echo $this->__('Product import report') ?></h2>
+<table>
+    <tr>
+        <td><?php echo $this->__('Store') ?>:</td>
+        <td colspan="2">
+            <a href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB)?>">
+                <?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB)?>
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td><?php echo $this->__('Starting time') ?>:</td>
+        <td colspan="2"><?php echo $this->getStartingTime() ?></td>
+    <tr/>
+    <tr>
+        <td><?php echo $this->__('Time taken') ?>:</td>
+        <td><?php echo $this->getTimeTaken() ?> s</td>
+        <td>(<?php echo $this->getTimeTakenInMinutes() ?> min)</td>
+    <tr/>
+    <tr>
+        <td><?php echo $this->__('Total import files') ?>:</td>
+        <td colspan="2"><?php echo $this->getImportFileCount() ?></td>
+    </tr>
+    <tr>
+        <td><?php echo $this->__('Import files with errors') ?>:</td>
+        <td colspan="2"><?php echo $this->getImportFileWithErrorCount() ?></td>
+    </tr>
+</table>
+<br />
+<?php if( $this->hasImportErrors() ): ?>
+    <table>
+        <tr>
+            <th style="border: 1px; border-style: solid; padding: 5px;"><?php echo $this->__('Area') ?></th>
+            <th style="border: 1px; border-style: solid; padding: 5px;"><?php echo $this->__('Error Message') ?></th>
+        </tr>
+        <?php foreach($this->getErrors() as $area => $errorMessages):?>
+            <?php $rowspan = count($errorMessages); ?>
+            <?php if( $rowspan == 0): ?>
+                <?php continue; ?>
+            <?php endif ?>
+            <?php foreach($errorMessages as $number => $errorMessage):?>
+                <tr>
+                    <?php if($number === 0):?>
+                        <td style="border: 1px; border-style: solid; padding: 5px;" rowspan="<?php echo $rowspan ?>"><?php echo $area?></td>
+                    <?php endif; ?>
+                    <td style="border: 1px; border-style: solid; padding: 5px;"><?php echo $errorMessage ?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php endforeach; ?>
+    </table>
+<?php endif; ?>
+
+<?php if( $this->hasMissingAttributes() ): ?>
+    <p><?php echo $this->__('Import file contains attributes that do not exist in the system'); ?></p>
+    <ul>
+        <?php foreach($this->getMissingAttributes() as $missingAttribute):?>
+            <li><?php echo $missingAttribute ?></li>
+        <?php endforeach;?>
+    </ul>
+<?php endif; ?>

@@ -120,11 +120,6 @@ Any contribution is appreciated, just open a pull request. If possible stick to 
 
 
 
-Uninstalation
--------------
-1. Remove extension files
-2. Delete transactional email templates "Product Import Error Report" and "Product Import Missing Attributes Report"
-
 License
 -------
 [Open Software Licence 3.0 (OSL-3.0)](http://opensource.org/licenses/osl-3.0.php)

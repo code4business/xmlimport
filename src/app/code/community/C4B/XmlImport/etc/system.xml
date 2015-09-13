@@ -30,7 +30,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <comment>This is the directory the product's import xml files are loaded from.</comment>                        
+                            <comment>This is the directory the product's import xml files are loaded from.</comment>
                         </import_xml_dir>
                         <success_dir>
                             <label>Success Directory</label>
@@ -39,7 +39,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <comment>Successfully imported product files are moved here.</comment>                        
+                            <comment>Successfully imported product files are moved here.</comment>
                         </success_dir>
                         <error_dir>
                             <label>Error Directory</label>
@@ -48,7 +48,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <comment>Failed import files are moved here. Check the log/import.log for error messages.</comment>                        
+                            <comment>Failed import files are moved here. Check the log/import.log for error messages.</comment>
                         </error_dir>
                     </fields>
                 </general>
@@ -69,7 +69,7 @@
                             <show_in_store>0</show_in_store>
                             <comment>
                                 <![CDATA[If disabled, images with duplicate names will not be uploaded unless it is newer.]]>
-                            </comment>                
+                            </comment>
                         </duplicate_append_suffix>
                     </fields>
                 </images>
@@ -90,7 +90,7 @@
                             <show_in_store>0</show_in_store>
                             <comment>
                                 <![CDATA[The root category used when creating missing categories.]]>
-                            </comment>                
+                            </comment>
                         </root_category>
                         <create_category>
                             <label>Create categories</label>
@@ -102,7 +102,7 @@
                             <show_in_store>0</show_in_store>
                             <comment>
                                 <![CDATA[Create non-existing categories.]]>
-                            </comment>                
+                            </comment>
                         </create_category>
                         <create_attributes translate="label">
                             <label>New attributes</label>
@@ -133,56 +133,25 @@
                     <show_in_website>0</show_in_website>
                     <show_in_store>0</show_in_store>
                     <fields>
-                        <missing_attributes_recipients translate="label">
-                            <label>New Attribute Notification Recipients</label>
+                        <report_recipients translate="label">
+                            <label>Report Recipients</label>
                             <frontend_type>text</frontend_type>
                             <frontend_model>xmlimport/adminhtml_system_config_email</frontend_model>
-                            <comment>
-                                <![CDATA[Recipients of missing attributes notification.]]>
-                            </comment>
                             <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                        </missing_attributes_recipients>
-                        <missing_attributes_template>
-                            <label>Missing attributes Email template</label>
+                        </report_recipients>
+                        <report_template>
+                            <label>Report Email template</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_email_template</source_model>
-                            <comment>
-                                <![CDATA[Email template for sending list of missing attributes during import.]]>
-                            </comment>
                             <sort_order>15</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                        </missing_attributes_template>
-                        <import_error_receipients translate="label">
-                            <label>Import Errors Notification Receipients</label>
-                            <frontend_type>text</frontend_type>
-                            <frontend_model>xmlimport/adminhtml_system_config_email</frontend_model>
-                            <comment>
-                                <![CDATA[Import error notifications.]]>
-                            </comment>
-                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </import_error_receipients>
-                        <import_error_template>
-                            <label>Import errors Email template</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_email_template</source_model>
-                            <comment>
-                                <![CDATA[Email template for list of errors during import.]]>
-                            </comment>
-                            <sort_order>25</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </import_error_template>
+                        </report_template>
                     </fields>
                </notifications>
             </groups>
