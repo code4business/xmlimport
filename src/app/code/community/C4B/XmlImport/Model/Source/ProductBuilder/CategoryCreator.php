@@ -25,7 +25,7 @@ class C4B_XmlImport_Model_Source_ProductBuilder_CategoryCreator
      *
      * @var array
      */
-    protected $_messages = array();
+    protected $_messages;
 
     /**
      * Default constructor.
@@ -43,7 +43,7 @@ class C4B_XmlImport_Model_Source_ProductBuilder_CategoryCreator
      */
     public function createIfItNotExists($categoryNamePath)
     {
-        $this->_messages = array();
+        $this->_messages = array('error' => array(), 'notice' => array());
         if( isset($this->_categories[$categoryNamePath]) )
         {
             return true;
@@ -60,10 +60,7 @@ class C4B_XmlImport_Model_Source_ProductBuilder_CategoryCreator
 
             if( empty($categoryName) )
             {
-                $this->_messages[] = array(
-                    'message' => "Category [{$categoryNamePath}] can not have empty path parts.",
-                    'type' => 'error'
-                );
+                $this->_messages['error'][] = "Category [{$categoryNamePath}] can not have empty path parts.";
                 return false;
             }
 
@@ -80,17 +77,12 @@ class C4B_XmlImport_Model_Source_ProductBuilder_CategoryCreator
 
                 try {
                     $category->save();
-                    $this->_messages[] = array(
-                        'message' => "Created category {$categoryName}",
-                        'type' => 'notice'
-                    );
+                    $this->_messages['notice'][] = "Created category {$categoryName}";
                 } catch (Exception $e)
                 {
                     Mage::logException($e);
-                    $this->_messages[] = array(
-                        'message' => "Category with name {$categoryName} and path {$currentCategoryPath} can not be saved.",
-                        'type' => 'error'
-                    );
+                    $this->_messages['error'][] =
+                        "Category with name {$categoryName} and path {$currentCategoryPath} can not be saved.";
                     return false;
                 }
 
@@ -102,12 +94,21 @@ class C4B_XmlImport_Model_Source_ProductBuilder_CategoryCreator
     }
 
     /**
-     * Get the reported messages.
+     * Get the reported errors.
      * @return array
      */
-    public function getMessages()
+    public function getErrors()
     {
-        return $this->_messages;
+        return $this->_messages['error'];
+    }
+
+    /**
+     * Get the reported notices.
+     * @return array
+     */
+    public function getNotices()
+    {
+        return $this->_messages['notice'];
     }
 
     /**

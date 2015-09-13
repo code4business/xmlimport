@@ -27,9 +27,9 @@ class C4B_XmlImport_Test_Model_Source_ProductBuilder_CategoryCreator extends Eco
         /** @var C4B_XmlImport_Model_Source_ProductBuilder_CategoryCreator $categoryCreator */
         $categoryCreator = Mage::getModel('xmlimport/source_productBuilder_categoryCreator');
         $this->assertTrue( $categoryCreator->createIfItNotExists('Nonexisting') );
-        $messages = $categoryCreator->getMessages();
-        $this->assertCount(1, $messages);
-        $this->assertEquals('notice', $messages[0]['type']);
+        $notices = $categoryCreator->getNotices();
+        $this->assertCount(1, $notices);
+        $this->assertContains('Created category', $notices[0]);
     }
 
     /**
@@ -51,10 +51,9 @@ class C4B_XmlImport_Test_Model_Source_ProductBuilder_CategoryCreator extends Eco
         /** @var C4B_XmlImport_Model_Source_ProductBuilder_CategoryCreator $categoryCreator */
         $categoryCreator = Mage::getModel('xmlimport/source_productBuilder_categoryCreator');
         $this->assertFalse( $categoryCreator->createIfItNotExists('Nonexisting//empty_path') );
-        $messages = $categoryCreator->getMessages();
-        $this->assertCount(2, $messages);
-        $this->assertEquals('error', $messages[1]['type']);
-        $this->assertContains('empty path parts', $messages[1]['message']);
+        $errors = $categoryCreator->getErrors();
+        $this->assertCount(1, $errors);
+        $this->assertContains('empty path parts', $errors[0]);
     }
 
     /**
@@ -70,9 +69,8 @@ class C4B_XmlImport_Test_Model_Source_ProductBuilder_CategoryCreator extends Eco
         /** @var C4B_XmlImport_Model_Source_ProductBuilder_CategoryCreator $categoryCreator */
         $categoryCreator = Mage::getModel('xmlimport/source_productBuilder_categoryCreator');
         $this->assertFalse( $categoryCreator->createIfItNotExists('Exception') );
-        $messages = $categoryCreator->getMessages();
-        $this->assertCount(1, $messages);
-        $this->assertEquals('error', $messages[0]['type']);
-        $this->assertContains('can not be saved', $messages[0]['message']);
+        $errors = $categoryCreator->getErrors();
+        $this->assertCount(1, $errors);
+        $this->assertContains('can not be saved', $errors[0]);
     }
 }

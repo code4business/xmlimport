@@ -13,7 +13,11 @@ class C4B_XmlImport_Model_Source_ProductBuilder
     const EVENT_NAME_AFTER_SIMPLE_DATA = 'c4b_xmlimport_after_simple_data';
     const EVENT_NAME_AFTER_COMPLEX_DATA = 'c4b_xmlimport_after_complex_data';
 
-    protected $_errors = array();
+    /**
+     * Reported messages
+     * @var array
+     */
+    protected $_messages;
 
     /**
      * Validate and extract product data from a single node. Returns an array of product data or null if errors occured.
@@ -28,17 +32,17 @@ class C4B_XmlImport_Model_Source_ProductBuilder
 
         $xmlProductNode = simplexml_import_dom( $node );
 
-        $this->_errors = array();
+        $this->_messages = array('error' => array(), 'notice' => array());
         if( !property_exists( $xmlProductNode, 'simple_data' ) )
         {
-            $this->_errors[] = 'Missing <simple_data> node.';
+            $this->_messages['error'][] = 'Missing <simple_data> node.';
             return null;
         }
 
         $productData = $this->_extractSimpleData($xmlProductNode, $this->_extractStoreCodes($xmlProductNode) );
         if($productData == null)
         {
-            $this->_errors[] = 'Invalid simple data.';
+            $this->_messages['error'][] = 'Invalid simple data.';
             return null;
         }
         $productData = $this->_afterSimpleData($productData);
@@ -50,7 +54,7 @@ class C4B_XmlImport_Model_Source_ProductBuilder
         $complexAttributeData = $this->_extractComplexData( $xmlProductNode );
         if($complexAttributeData === null)
         {
-            $this->_errors[] = 'Invalid complex data.';
+            $this->_messages['error'][] = 'Invalid complex data.';
             return null;
         }
         $complexAttributeData = $this->_afterComplexData($complexAttributeData, $productData['default']['sku']);
@@ -64,12 +68,21 @@ class C4B_XmlImport_Model_Source_ProductBuilder
     }
 
     /**
-     * Return all error messages that were loged.
+     * Get the reported errors.
      * @return array
      */
     public function getErrors()
     {
-        return $this->_errors;
+        return $this->_messages['error'];
+    }
+
+    /**
+     * Get the reported notices.
+     * @return array
+     */
+    public function getNotices()
+    {
+        return $this->_messages['notice'];
     }
 
     /**
@@ -122,7 +135,8 @@ class C4B_XmlImport_Model_Source_ProductBuilder
                 $productData[$xmlStoreCode] = Array();
             } else
             {
-                $this->_errors[] = "The store '{$xmlStoreCode}' does not exist in the system. Data regarding this store will not be imported.";
+                $this->_messages['error'][] =
+                    "Store '{$xmlStoreCode}' does not exist in the system. Any data of its scope will be ignored.";
             }
         }
 
@@ -236,7 +250,10 @@ class C4B_XmlImport_Model_Source_ProductBuilder
 
         Mage::dispatchEvent(self::EVENT_NAME_AFTER_SIMPLE_DATA, array('transport' => $transport));
         $productData = $transport->getData('product_data');
-        $this->_errors = array_merge( $this->_errors,$transport->getData('errors') );
+        foreach( $transport->getData('errors') as $reportedErrorFromObserver)
+        {
+            $this->_messages['error'][] = $reportedErrorFromObserver;
+        }
 
         if( $transport->getData('invalidate_data') == true )
         {
@@ -268,7 +285,7 @@ class C4B_XmlImport_Model_Source_ProductBuilder
             $complexAttributeData = $complexAttribute->getComplexAttributeData($complexDataNode);
             if( is_null($complexAttributeData) )
             {
-                $this->_errors[] = "Complex attribute at position {$complexAttributePosition} is invalid.";
+                $this->_messages['error'][] = "Complex attribute at position {$complexAttributePosition} is invalid.";
                 return null;
             }
             $productData = array_merge($productData, $complexAttributeData);
@@ -287,13 +304,16 @@ class C4B_XmlImport_Model_Source_ProductBuilder
         $productComplexData = $this->_createNewCategories($productComplexData);
 
         $transport = new Varien_Object();
-        $transport->setData('product_complex_data',$productComplexData);
+        $transport->setData('product_complex_data', $productComplexData);
         $transport->setData('product_sku', $sku);
         $transport->setData('errors',array());
         $transport->setData('invalidate_data',false);
 
         Mage::dispatchEvent(self::EVENT_NAME_AFTER_COMPLEX_DATA,array('transport' => $transport));
-        $this->_errors = array_merge( $this->_errors,$transport->getData('errors') );
+        foreach( $transport->getData('errors') as $reportedErrorFromObserver)
+        {
+            $this->_messages['error'][] = $reportedErrorFromObserver;
+        }
 
         if( $transport->getData('invalidate_data') == true )
         {
@@ -326,10 +346,7 @@ class C4B_XmlImport_Model_Source_ProductBuilder
 
             foreach($categoryCreator->getMessages() as $messageData)
             {
-                if( $messageData['type'] == 'error' )
-                {
-                    $this->_errors[] = $messageData['message'];
-                }
+                $this->_messages[] = $messageData;
              }
         }
         return $productComplexData;

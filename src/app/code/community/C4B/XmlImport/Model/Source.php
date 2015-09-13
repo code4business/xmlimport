@@ -111,21 +111,21 @@ class C4B_XmlImport_Model_Source
             }
             $productNodePosition++;
             $productData = $productBuilder->getProductData( $xmlReader->expand() );
-            if( count($productBuilder->getErrors()) > 0 )
-            {
-                $importReport->error("Product at position {$productNodePosition} has errors:");
-            }
+
+            $importReport->error($productBuilder->getErrors(), basename($filePath));
+            $importReport->notice($productBuilder->getNotices(), basename($filePath));
+
             if($productData == null)
             {
-                $importReport->error('Product will not be imported');
-            } else
+                $importReport->notice('Product will not be imported', basename($filePath));
+            }
+            else
             {
                 foreach ($productData as $productDataRow)
                 {
                     $products[] = $productDataRow;
                 }
             }
-            $importReport->error( $productBuilder->getErrors(), basename($filePath) );
         }
 
         return $products;
