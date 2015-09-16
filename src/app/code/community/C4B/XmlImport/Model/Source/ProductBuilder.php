@@ -59,7 +59,7 @@ class C4B_XmlImport_Model_Source_ProductBuilder
         }
         $complexAttributeData = $this->_afterComplexData($complexAttributeData, $productData['default']['sku']);
 
-        if( !is_null($complexAttributeData) && !empty($complexAttributeData) )
+        if( !empty($complexAttributeData) )
         {
             $productData['default'] = array_merge($productData['default'], $complexAttributeData);
         }
