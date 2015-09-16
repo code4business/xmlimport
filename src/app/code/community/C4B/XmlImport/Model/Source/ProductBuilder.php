@@ -226,6 +226,7 @@ class C4B_XmlImport_Model_Source_ProductBuilder
             elseif( $isSkuSet == false && array_key_exists('sku', $storeSpecificData) )
             {
                 $productData['default']['sku'] = $storeSpecificData['sku'];
+                $productData['default']['_store'] = null;
                 $productData[$storeCode]['sku'] = null;
                 $isSkuSet = true;
             }
