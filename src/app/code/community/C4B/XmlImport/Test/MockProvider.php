@@ -90,4 +90,23 @@ class C4B_XmlImport_Test_MockProvider
         ));
         TestUtil::replaceByMock('singleton', 'xmlimport/source_productBuilder_categoryCreator', $attributeCreatorMock);
     }
+
+    /**
+     * Set a category creator class that is not supposed to be called.
+     *
+     * @param $testCase EcomDev_PHPUnit_Test_Case
+     */
+    public function setCategoryCreatorMockCallCounter($testCase)
+    {
+        $categoryCreatorMock = $testCase->getModelMock(
+            'xmlimport/source_productBuilder_categoryCreator', array('createIfItNotExists', 'getErrors', 'getNotices'),
+            false, array(), '',
+            false
+        );
+
+        $categoryCreatorMock->expects($testCase->never())->method('createIfItNotExists');
+        $categoryCreatorMock->expects($testCase->any())->method('getErrors')->willReturn(array());
+        $categoryCreatorMock->expects($testCase->any())->method('getNotices')->willReturn(array());
+        TestUtil::replaceByMock('singleton', 'xmlimport/source_productBuilder_categoryCreator', $categoryCreatorMock);
+    }
 }

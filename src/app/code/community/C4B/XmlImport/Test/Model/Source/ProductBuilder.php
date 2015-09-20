@@ -228,8 +228,54 @@ class C4B_XmlImport_Test_Model_Source_ProductBuilder extends EcomDev_PHPUnit_Tes
         $this->assertEquals($notices[0], 'Created category Subcategory');
     }
 
-    //TODO: CategoryCreator returns false, category is removed
-    //TODO: CategoryCreator option to create missing categories
+    /**
+     * @test
+     * @loadExpectation
+     * @loadFixture stores_german_french
+     */
+    public function test_errorInCategoryCreatorSkipsCategory()
+    {
+        $this->_mockProvider->setAttributeCreatorMockDummy($this);
+        $this->_mockProvider->setComplexAttributeMockReturnsGiven(
+            $this,
+            $this->expected('mocked-complex-attr-data')->getData()
+        );
+        $this->_mockProvider->setCategoryCreatorMockReturnsGiven(
+            $this,
+            $this->expected('mocked-category-creator-data')->getData()
+        );
+
+        /** @var C4B_XmlImport_Model_Source_ProductBuilder $productBuilder */
+        $productBuilder = Mage::getModel('xmlimport/source_productBuilder');
+        $productData = $productBuilder->getProductData( $this->_dataProvider->getSimpleComplex() );
+
+        $this->assertEquals($this->expected('data')->getData(), $productData);
+        $errors = $productBuilder->getErrors();
+        $this->assertCount(1, $errors);
+        $this->assertEquals($errors[0], 'Mocked error message');
+    }
+
+    /**
+     * @test
+     * @loadExpectation simple_complex
+     * @loadFixture
+     */
+    public function test_categoriesNotCreatedWhenOptionIsOff()
+    {
+        $this->_mockProvider->setAttributeCreatorMockDummy($this);
+        $this->_mockProvider->setComplexAttributeMockReturnsGiven(
+            $this,
+            $this->expected('mocked-complex-attr-data')->getData()
+        );
+        $this->_mockProvider->setCategoryCreatorMockCallCounter($this);
+
+        /** @var C4B_XmlImport_Model_Source_ProductBuilder $productBuilder */
+        $productBuilder = Mage::getModel('xmlimport/source_productBuilder');
+        $productBuilder->getProductData( $this->_dataProvider->getSimpleComplex() );
+
+        //assert categoryCreator::createIfItNotExists not called
+    }
+
     //TODO: events dispatched
     //TODO: Observer changes data
     //TODO: Observer invalidates data
