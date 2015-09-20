@@ -1,0 +1,60 @@
+data:
+ -
+  sku: SIMPLE-1
+  _attribute_set: "Default"
+  _type: simple
+  _store: null
+  name: "Import Simple product"
+  price: "10"
+  description: "Test description"
+  short_description: "Test short description"
+  status: "1"
+  qty: "50"
+  is_in_stock: "1"
+  image: "images/image1.jpg"
+  _product_websites:
+   - base
+  _category:
+   - Category
+   - Category/Subcategory
+  _media_image:
+   - "images/image1.jpg"
+   - "images/image2.jpg"
+  _media_is_disabled:
+   - 0
+   - 0
+ -
+  sku: null
+  _store: german
+  name: "Import German Einfaches produkt"
+  description: "Testbeschreibung"
+  short_description: "Test kurze Beschreibung"
+ -
+  sku: null
+  _store: french
+  name: "Import produit simple"
+  description: "Description de l'essai"
+  short_description: "Essai courte description"
+mocked-category-creator-data:
+ _category:
+    - Category
+    - Category/Subcategory
+ errors:
+  - []
+  - []
+ notices:
+  - []
+  -
+   - "Created category Subcategory"
+mocked-complex-attr-data:
+ _product_websites:
+  - base
+ _category:
+   - "Category"
+   - "Category/Subcategory"
+ _media_image:
+  - "images/image1.jpg"
+  - "images/image2.jpg"
+ _media_is_disabled:
+  - 0
+  - 0

@@ -1,0 +1,10 @@
+data:
+ -
+  sku: SIMPLE-1
+  _store: null
+ -
+  sku: null
+  _store: german
+  name: "Import German Einfaches produkt"
+  description: "Testbeschreibung"
+  short_description: "Test kurze Beschreibung"

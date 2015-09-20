@@ -1,0 +1,9 @@
+scope:
+ store:
+  0:
+   store_id: 2
+   website_id: 1
+   group_id: 1
+   code: "german"
+   name: "German Store"
+   is_active: 1
