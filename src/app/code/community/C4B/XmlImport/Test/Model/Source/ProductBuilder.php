@@ -276,7 +276,31 @@ class C4B_XmlImport_Test_Model_Source_ProductBuilder extends EcomDev_PHPUnit_Tes
         //assert categoryCreator::createIfItNotExists not called
     }
 
-    //TODO: events dispatched
+    /**
+     * @test
+     * @loadExpectation simple_complex
+     * @loadFixture stores_german_french
+     */
+    public function test_eventsDispatched()
+    {
+        $this->_mockProvider->setAttributeCreatorMockDummy($this);
+        $this->_mockProvider->setComplexAttributeMockReturnsGiven(
+            $this,
+            $this->expected('mocked-complex-attr-data')->getData()
+        );
+        $this->_mockProvider->setCategoryCreatorMockReturnsGiven(
+            $this,
+            $this->expected('mocked-category-creator-data')->getData()
+        );
+
+        /** @var C4B_XmlImport_Model_Source_ProductBuilder $productBuilder */
+        $productBuilder = Mage::getModel('xmlimport/source_productBuilder');
+        $productBuilder->getProductData( $this->_dataProvider->getSimpleComplex() );
+
+        $this->assertEventDispatched(C4B_XmlImport_Model_Source_ProductBuilder::EVENT_NAME_AFTER_SIMPLE_DATA);
+        $this->assertEventDispatched(C4B_XmlImport_Model_Source_ProductBuilder::EVENT_NAME_AFTER_COMPLEX_DATA);
+    }
+    
     //TODO: Observer changes data
     //TODO: Observer invalidates data
     //TODO: Observer errors
