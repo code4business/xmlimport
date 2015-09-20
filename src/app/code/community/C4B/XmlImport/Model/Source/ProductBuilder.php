@@ -345,10 +345,15 @@ class C4B_XmlImport_Model_Source_ProductBuilder
                 unset($productComplexData['_category'][$key]);
             }
 
-            foreach($categoryCreator->getMessages() as $messageData)
+            foreach($categoryCreator->getErrors() as $error)
             {
-                $this->_messages[] = $messageData;
-             }
+                $this->_messages['error'][] = $error;
+            }
+
+            foreach($categoryCreator->getNotices() as $notice)
+            {
+                $this->_messages['notice'][] = $notice;
+            }
         }
         return $productComplexData;
     }
